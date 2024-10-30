@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/30 15:37:13 by akostian         ###   ########.fr       */
+/*   Updated: 2024/10/30 20:02:17 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,15 +104,15 @@ int	main(int argc, char **argv)
 		if (!user_argv)
 			return (free(line), rl_clear_history(), env_variables.free(&env_variables), free_arr_str(user_argv), 1);
 
-		printf(BYEL"%d\n"CRESET, user_argc);
-		print_splited(user_argv);
+		// printf(BYEL"%d\n"CRESET, user_argc);
+		// print_splited(user_argv);
 
 		if (user_argv[0])
 		{
-			if (!ft_strncmp("exit", user_argv[0], ft_max(4, ft_strlen(line))))
+			if (!ft_strcmp(user_argv[0], "exit"))
 				break ;
 
-			if (!ft_strncmp("cd", user_argv[0], ft_max(2, ft_strlen(line))))
+			if (!ft_strcmp(user_argv[0], "cd"))
 			{
 				exit_code = ft_cd(&env_variables, user_argc, user_argv);
 				if (exit_code == 1)
@@ -123,6 +123,8 @@ int	main(int argc, char **argv)
 					break ;
 				}
 			}
+			if (!ft_strcmp(user_argv[0], "echo"))
+				exit_code = ft_echo(user_argc, user_argv);
 		}
 
 		add_history (line);
