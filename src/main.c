@@ -6,12 +6,14 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/23 16:57:54 by akostian         ###   ########.fr       */
+/*   Updated: 2024/10/30 15:37:13 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "../include/hashmap.h"
+
+unsigned char	exit_code = 0;
 
 void	print_splited(char **splited)
 {
@@ -91,9 +93,6 @@ int	main(int argc, char **argv)
 	fill_env_variables(&env_variables);
 	using_history();
 
-
-	
-
 	while (1)
 	{
 		promt = generate_promt(&env_variables);
@@ -108,8 +107,23 @@ int	main(int argc, char **argv)
 		printf(BYEL"%d\n"CRESET, user_argc);
 		print_splited(user_argv);
 
-		if (!ft_strncmp("exit", user_argv[0], ft_max(4, ft_strlen(line))))
-			break ;
+		if (user_argv[0])
+		{
+			if (!ft_strncmp("exit", user_argv[0], ft_max(4, ft_strlen(line))))
+				break ;
+
+			if (!ft_strncmp("cd", user_argv[0], ft_max(2, ft_strlen(line))))
+			{
+				exit_code = ft_cd(&env_variables, user_argc, user_argv);
+				if (exit_code == 1)
+					printf("ft_cd: no such file or directory %s\n", user_argv[1]);
+				else if (exit_code == 2)
+				{
+					printf("ft_cd: not enough memory\n");
+					break ;
+				}
+			}
+		}
 
 		add_history (line);
 		free_arr_str(user_argv);
@@ -123,7 +137,11 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-/* int	fill_env_variables(t_hashmap *env_variables, char **envp)
+/*
+
+Code to insert every env varialbe passed into main() inside env_variables
+
+int	fill_env_variables(t_hashmap *env_variables, char **envp)
 {
 	size_t	i;
 	size_t	j;
