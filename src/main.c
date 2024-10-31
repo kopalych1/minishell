@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/30 20:07:27 by akostian         ###   ########.fr       */
+/*   Updated: 2024/10/31 04:54:14 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ int	main(int argc, char **argv)
 				exit_code = ft_echo(user_argc, user_argv);
 			if (!ft_strcmp(user_argv[0], "pwd"))
 				exit_code = ft_pwd(&env_variables);
+			if (!ft_strcmp(user_argv[0], "env"))
+				exit_code = ft_env(&env_variables);
 		}
 
 		add_history (line);
