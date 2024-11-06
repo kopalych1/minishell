@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hm_init.c                                          :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/08 17:55:00 by akostian          #+#    #+#             */
-/*   Updated: 2024/11/06 05:17:30 by akostian         ###   ########.fr       */
+/*   Created: 2024/10/31 13:31:02 by akostian          #+#    #+#             */
+/*   Updated: 2024/11/06 05:34:07 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/hashmap.h"
+#include "../../include/minishell.h"
 
-void	hm_init(t_hashmap *hm)
+int	ft_unset(t_hashmap *env_variables, int argc, char **argv)
 {
-	hm->items = NULL;
-	hm->length = 0;
-	hm->get = hm_get;
-	hm->set = hm_set;
-	hm->free = hm_free;
-	hm->delete = hm_delete;
+	int	i;
+
+	if (argc < 2)
+		return (1);
+	i = 1;
+	while (i < argc)
+		if (env_variables->delete(env_variables, argv[i++]))
+			return (1);
+	return (0);
 }

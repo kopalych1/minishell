@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:41 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/31 04:54:27 by akostian         ###   ########.fr       */
+/*   Updated: 2024/10/31 19:07:07 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int		ft_cd(t_hashmap *env_variables, int argc, char **argv);
 int		ft_echo(int argc, char **argv);
 int		ft_pwd(t_hashmap *env_variables);
 int		ft_env(t_hashmap *env_variables);
+int		ft_unset(t_hashmap *env_variables, int argc, char **argv);
 
 /*  */
 

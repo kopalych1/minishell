@@ -1,23 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hm_init.c                                          :+:      :+:    :+:   */
+/*   hm_key_exists.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/08 17:55:00 by akostian          #+#    #+#             */
-/*   Updated: 2024/11/06 05:17:30 by akostian         ###   ########.fr       */
+/*   Created: 2024/11/06 05:09:19 by akostian          #+#    #+#             */
+/*   Updated: 2024/11/06 05:15:16 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/hashmap.h"
 
-void	hm_init(t_hashmap *hm)
+ssize_t	hm_key_exists(t_hashmap *hm, const char *key)
 {
-	hm->items = NULL;
-	hm->length = 0;
-	hm->get = hm_get;
-	hm->set = hm_set;
-	hm->free = hm_free;
-	hm->delete = hm_delete;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (i < hm->length)
+	{
+		j = 0;
+		while ((hm->items[i].key[j] == key[j])
+			&& hm->items[i].key[j] && key[j])
+			j++;
+		if ((!hm->items[i].key[j]) && (!key[j]))
+			return (i);
+		i++;
+	}
+	return (-1);
 }

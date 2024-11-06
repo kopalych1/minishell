@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 23:17:07 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/24 20:52:39 by akostian         ###   ########.fr       */
+/*   Updated: 2024/11/06 05:09:24 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,6 @@ static void	free_hm_n(t_hashmap *hm, size_t i)
 		if (hm->items[i].do_free)
 			free(hm->items[i].content);
 	}
-}
-
-ssize_t	hm_key_exists(t_hashmap *hm, const char *key)
-{
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	while (i < hm->length)
-	{
-		j = 0;
-		while ((hm->items[i].key[j] == key[j])
-			&& hm->items[i].key[j] && key[j])
-			j++;
-		if ((!hm->items[i].key[j]) && (!key[j]))
-			return (i);
-		i++;
-	}
-	return (-1);
 }
 
 int	hm_copy(t_hashmap *hm, t_hashmap_item *old_items)

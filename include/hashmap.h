@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:28:22 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/30 15:40:34 by akostian         ###   ########.fr       */
+/*   Updated: 2024/11/06 05:17:58 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ typedef struct s_hashmap
 	void				(*free)(
 			struct s_hashmap *hm
 			);
+	int					(*delete)(
+			struct s_hashmap *hm,
+			const char *key
+			);
 }	t_hashmap;
 
 void		hm_init(t_hashmap *hm);
@@ -53,5 +57,7 @@ int			hm_set(
 				unsigned char do_free
 				);
 void		hm_free(t_hashmap *hm);
+int			hm_delete(t_hashmap *hm, const char *key);
+ssize_t		hm_key_exists(t_hashmap *hm, const char *key);
 
 #endif

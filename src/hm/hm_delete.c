@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hm_init.c                                          :+:      :+:    :+:   */
+/*   hm_delete.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/08 17:55:00 by akostian          #+#    #+#             */
-/*   Updated: 2024/11/06 05:17:30 by akostian         ###   ########.fr       */
+/*   Created: 2024/10/31 18:31:37 by akostian          #+#    #+#             */
+/*   Updated: 2024/11/06 05:08:08 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/hashmap.h"
 
-void	hm_init(t_hashmap *hm)
+int	hm_delete(t_hashmap *hm, const char *key)
 {
-	hm->items = NULL;
-	hm->length = 0;
-	hm->get = hm_get;
-	hm->set = hm_set;
-	hm->free = hm_free;
-	hm->delete = hm_delete;
+	const ssize_t	key_index = hm_key_exists(hm, key);
+	size_t			i;
+
+	if (key_index == -1)
+		return (1);
+	if (hm->items[key_index].do_free)
+		free(hm->items[key_index].content);
+	free(hm->items[key_index].key);
+	hm->length--;
+	i = key_index;
+	while (i < hm->length)
+	{
+		hm->items[i] = hm->items[i + 1];
+		i++;
+	}
+	return (0);
 }
