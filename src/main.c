@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2024/11/18 17:00:47 by akostian         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:21:21 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,18 @@ void	print_splited(char **splited)
 
 int	fill_env_variables(t_hashmap *env_variables)
 {
-	env_variables->set(env_variables, "PATH", getenv("PATH"), 0);
-	env_variables->set(env_variables, "USER", getenv("USER"), 0);
-	env_variables->set(env_variables, "HOME", getenv("HOME"), 0);
-	env_variables->set(env_variables, "PWD", getenv("PWD"), 0);
-	env_variables->set(env_variables, "OLDPWD", getenv("OLDPWD"), 0);
-	env_variables->set(env_variables, "NAME", getenv("NAME"), 0);
+	if (!env_variables->set(env_variables, "PATH", getenv("PATH"), 0))
+		return (ENOMEM);
+	if (!env_variables->set(env_variables, "USER", getenv("USER"), 0))
+		return (ENOMEM);
+	if (!env_variables->set(env_variables, "HOME", getenv("HOME"), 0))
+		return (ENOMEM);
+	if (!env_variables->set(env_variables, "PWD", getenv("PWD"), 0))
+		return (ENOMEM);
+	if (!env_variables->set(env_variables, "OLDPWD", getenv("OLDPWD"), 0))
+		return (ENOMEM);
+	if (!env_variables->set(env_variables, "NAME", getenv("NAME"), 0))
+		return (ENOMEM);
 	return (0);
 }
 
@@ -90,19 +96,22 @@ int	main(int argc, char **argv)
 		exit(0);
 	}
 	hm_init(&env_variables);
-	fill_env_variables(&env_variables);
+	if (!fill_env_variables(&env_variables))
+			return (ENOMEM);
 	using_history();
 
 	while (1)
 	{
 		promt = generate_promt(&env_variables);
+		if (!promt)
+			return (ENOMEM);
 		line = readline(promt);
 		free(promt);
 
 		user_argc = calculate_argc(line);
 		user_argv = args_parse(line, &env_variables);
 		if (!user_argv)
-			return (free(line), rl_clear_history(), env_variables.free(&env_variables), free_arr_str(user_argv), 1);
+			return (free(line), rl_clear_history(), env_variables.free(&env_variables), free_arr_str(user_argv), ENOMEM);
 
 		// printf(BYEL"%d\n"CRESET, user_argc);
 		// print_splited(user_argv);
@@ -117,7 +126,7 @@ int	main(int argc, char **argv)
 				exit_code = ft_cd(&env_variables, user_argc, user_argv);
 				if (exit_code == 1)
 					printf("ft_cd: no such file or directory %s\n", user_argv[1]);
-				else if (exit_code == 2)
+				else if (exit_code == ENOMEM)
 				{
 					printf("ft_cd: not enough memory\n");
 					break ;

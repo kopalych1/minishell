@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 00:32:29 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/30 15:27:15 by akostian         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:04:38 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static int	verify_vars(t_hashmap *env_variables)
 {
 	if (!env_variables->get(env_variables, "PWD"))
-		return (2);
+		return (ENOMEM);
 	if (!env_variables->get(env_variables, "OLDPWD"))
-		return (2);
+		return (ENOMEM);
 	return (0);
 }
 
