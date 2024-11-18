@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2024/11/11 14:47:54 by akostian         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:00:47 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ int	main(int argc, char **argv)
 				exit_code = ft_unset(&env_variables, user_argc, user_argv);
 			if (!ft_strcmp(user_argv[0], "export"))
 				exit_code = ft_export(&env_variables, user_argc, user_argv);
+			printf("%d\n", exit_code);
 		}
 
 		add_history (line);

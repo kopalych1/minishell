@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 14:43:26 by akostian          #+#    #+#             */
-/*   Updated: 2024/11/12 15:54:39 by akostian         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:58:33 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,24 +51,30 @@ static int	print_env_alph(t_hashmap *env_variables)
 	return (0);
 }
 
-static int	verify_arg(char *arg)
+static int	verify_arg(char *arg, int *ver_code, int *ret_code)
 {
 	const size_t	arg_len = ft_strlen(arg);
 	size_t			i;
 
+	if (!arg[0])
+		return (*ret_code = 1, 0);
 	i = 0;
 	while (i < arg_len)
 	{
 		if (arg[i] == '=')
-			return (1);
+			return (*ver_code = 1, 1);
 		if (!ft_isalnum(arg[i]))
-			return (0);
+			return (*ret_code = 1, *ver_code = 0, 0);
 		i++;
 	}
-	return (2);
+	return (*ver_code = 2, 2);
 }
 
-static int	route(t_hashmap *env_variables, char *arg, int ver_code)
+static int	route(
+			t_hashmap *env_variables,
+			char *arg,
+			int ver_code
+)
 {
 	size_t	j;
 	char	*key;
@@ -76,24 +82,21 @@ static int	route(t_hashmap *env_variables, char *arg, int ver_code)
 
 	if (ver_code == 2)
 	{
-		if (!env_variables->get(env_variables, arg))
+		if (!(env_variables->get(env_variables, arg)))
 			if (env_variables->set(env_variables, arg, NULL, 0) == -1)
-				return (2);
+				return (ENOMEM);
+		return (0);
 	}
-	if (ver_code == 1)
-	{
-		j = 0;
-		while (arg[j++] != '=')
-			;
-		key = ft_substr(arg, 0, j - 1);
-		val = ft_substr(arg, j, ft_strlen(arg + j));
-		if (!key || !val)
-			return (free(key), free(val), 2);
-		if (env_variables->set(env_variables, key, val, 1) == -1)
-			return (free(key), free(val), 2);
-		free(key);
-	}
-	return (0);
+	j = 0;
+	while (arg[j] && (arg[j] != '='))
+		j++;
+	key = ft_substr(arg, 0, j);
+	val = ft_substr(arg, j + 1, ft_strlen(arg + j));
+	if (!key || !val)
+		return (free(key), free(val), ENOMEM);
+	if (env_variables->set(env_variables, key, val, 1) == -1)
+		return (free(key), free(val), ENOMEM);
+	return (free(key), 0);
 }
 
 int	ft_export(t_hashmap *env_variables, int argc, char **argv)
@@ -101,6 +104,7 @@ int	ft_export(t_hashmap *env_variables, int argc, char **argv)
 	int		i;
 	int		ret_code;
 	int		ver_code;
+	int		tmp;
 
 	ret_code = 0;
 	if (argc < 2)
@@ -108,18 +112,13 @@ int	ft_export(t_hashmap *env_variables, int argc, char **argv)
 	i = 0;
 	while (++i < argc)
 	{
-		if (!argv[i][0])
-		{
-			ret_code = 1;
+		if (!verify_arg(argv[i], &ver_code, &ret_code))
 			continue ;
-		}
-		ver_code = verify_arg(argv[i]);
-		if (!ver_code)
-		{
-			ret_code = 1;
-			continue ;
-		}
-		ret_code = route(env_variables, argv[i], ver_code);
+		tmp = route(env_variables, argv[i], ver_code);
+		if (tmp == ENOMEM)
+			return (ENOMEM);
+		if (!ret_code && tmp)
+			ret_code = tmp;
 	}
 	return (ret_code);
 }

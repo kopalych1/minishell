@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:41 by akostian          #+#    #+#             */
-/*   Updated: 2024/11/15 22:01:24 by akostian         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:29:58 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
+# include <errno.h>
+
+# ifndef ENOMEM
+#  define ENOMEM 12
+# endif
 
 # include <readline/readline.h>
 # include <readline/history.h>
