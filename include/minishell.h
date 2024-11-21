@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:41 by akostian          #+#    #+#             */
-/*   Updated: 2024/11/16 17:29:58 by akostian         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:26:29 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # include <limits.h>
 
 # include <dirent.h>
+
+# include <signal.h>
 
 # include "../libft/include/libft.h"
 # include "hashmap.h"
