@@ -10,7 +10,7 @@ A small recreation of Bash.
 
 The project must be cloned with --recursive flag:
 ```bash
-git clone --recursive https://github.com/kopalych1/minitalk.git
+git clone --recursive https://github.com/kopalych1/minishell.git
 ```
 If wasn't cloned recursively, submodules can be pulled after cloning with:
 ```bash
