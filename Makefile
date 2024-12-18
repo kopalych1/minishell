@@ -6,7 +6,7 @@
 #    By: akostian <akostian@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/19 13:20:29 by akostian          #+#    #+#              #
-#    Updated: 2024/11/15 22:01:12 by akostian         ###   ########.fr        #
+#    Updated: 2024/12/18 16:19:51 by akostian         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ VPATH					= src:src/hm:src/parse:src/builtin
 
 SRC_DIR					= src
 SRCS					= main.c \
-						  parse.c process_arg.c get_var_length.c calculate_argc.c \
+						  parse.c process_arg.c get_var_length.c calculate_argc.c parse_utils.c \
 						  hm_free.c hm_get.c hm_set.c hm_init.c hm_delete.c hm_key_exists.c hm_sort_keys.c \
 						  ft_cd.c ft_echo.c ft_pwd.c ft_env.c ft_unset.c ft_export.c \
 						  free_arr.c
@@ -91,6 +91,15 @@ fclean:
 	make fclean -C $(LIBFT_DIR)
 
 	$(RM) $(BUILD_DIR) $(NAMES)
+#
+
+
+test: all $(LIBFT)
+	@$(CC) $(CFLAGS)  -o test.out  tests/parser.c  src/parse/*.c src/free_arr.c src/hm/*.c $(LIBFT)
+
+	@./test.out
+
+	@$(RM) test.out
 #
 
 

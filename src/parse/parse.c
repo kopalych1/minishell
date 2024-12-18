@@ -6,61 +6,28 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 04:04:01 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/23 16:58:07 by akostian         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:01:09 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static size_t	get_next_arg_len(char *str)
-{
-	char	quote_to_find;
-	size_t	length;
-
-	length = 0;
-	while (*str && !ft_isspace(*str))
-	{
-		if (*str == '\'' || *str == '\"')
-		{
-			quote_to_find = *str++;
-			length++;
-			while (*str && *str != quote_to_find)
-			{
-				str++;
-				length++;
-			}
-		}
-		length++;
-		str++;
-	}
-	return (length);
-}
-
 // Fills return array with splited string
 static int	fill_argv(char ***argv, const size_t argc, char *str)
 {
 	size_t	ret_index;
-	char	quote_to_find;
+	size_t	skip;
 
 	ret_index = 0;
 	while (ret_index < argc)
 	{
 		while (*str && ft_isspace(*str))
 			str++;
-		(*argv)[ret_index++] = ft_substr(str, 0, get_next_arg_len(str));
+		skip = get_next_arg_len(str);
+		(*argv)[ret_index++] = ft_substr(str, 0, skip);
 		if (!(*argv)[(ret_index - 1)])
 			return (free_arr_str(*argv), -1);
-		quote_to_find = 0;
-		while (*str && !ft_isspace(*str))
-		{
-			if (*str == '\'' || *str == '\"')
-			{
-				quote_to_find = *str++;
-				while (*str && *str != quote_to_find)
-					str++;
-			}
-			str++;
-		}
+		str += skip;
 	}
 	(*argv)[ret_index] = 0;
 	return (0);
