@@ -6,11 +6,12 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/31 04:54:14 by akostian         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:11:59 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include "../include/exec.h"
 #include "../include/hashmap.h"
 
 unsigned char	exit_code = 0;
@@ -74,7 +75,15 @@ size_t	ft_max(size_t val1, size_t val2)
 	return (val2);
 }
 
-int	main(int argc, char **argv)
+void	print_args(char **args)
+{
+	int	i = 0;
+	while (args[i])
+		printf("[%s]", args[i++]);
+	write(1, "\n", 1);
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_hashmap	env_variables;
 	char		*line;
@@ -102,10 +111,11 @@ int	main(int argc, char **argv)
 		user_argc = calculate_argc(line);
 		user_argv = args_parse(line, &env_variables);
 		if (!user_argv)
-			return (free(line), rl_clear_history(), env_variables.free(&env_variables), free_arr_str(user_argv), 1);
+			return (free(line), clear_history(), env_variables.free(&env_variables), free_arr_str(user_argv), 1);
 
-		// printf(BYEL"%d\n"CRESET, user_argc);
-		// print_splited(user_argv);
+		//print_args(user_argv);
+		 printf(BYEL"%d\n"CRESET, user_argc);
+		 print_splited(user_argv);
 
 		if (user_argv[0])
 		{
@@ -129,6 +139,7 @@ int	main(int argc, char **argv)
 				exit_code = ft_pwd(&env_variables);
 			if (!ft_strcmp(user_argv[0], "env"))
 				exit_code = ft_env(&env_variables);
+			executor(user_argv, envp); 
 		}
 
 		add_history (line);
@@ -138,7 +149,7 @@ int	main(int argc, char **argv)
 	free(line);
 	free_arr_str(user_argv);
 	env_variables.free(&env_variables);
-	rl_clear_history();
+	clear_history();
 
 	return (0);
 }

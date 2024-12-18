@@ -6,13 +6,33 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 11:51:55 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/07/15 13:30:25 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:51:35 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../../include/exec.h"
 
-static int	path_index(char **envp)
+int	treat_cmd(t_executor *exec)
+{
+	int	path_return;
+	t_cmd	*ret;
+	
+	ret = &(exec->cmd);
+	ret->args = list_to_arr(exec->exec_args.next);
+	if (ret->args == NULL || ret->args[0] == NULL)
+		return (1);
+	path_return = cmd_path(ret->args[0], exec->envp, &(ret->path));
+	if (path_return == -1)
+		return (2);
+	if (path_return == -2)
+	{
+		write(2, "Command not found\n", 18);
+		return (3);
+	}
+	return (0);
+}
+
+int	path_index(char **envp)
 {
 	int	i;
 
@@ -51,10 +71,10 @@ char	*join_path_cmd(char *path, char *cmd)
 	return (ret);
 }
 
-static int	find_path(char *cmd, char **paths, char **ret)
+int	find_path(char *cmd, char **paths, char **ret)
 {
 	char	*test_path;
-	int		i;
+	int	i;
 
 	i = 0;
 	*ret = NULL;
@@ -76,26 +96,12 @@ static int	find_path(char *cmd, char **paths, char **ret)
 	return (-2);
 }
 
-static int	free_and_ret(char **to_free, int ret)
-{
-	int	i;
-
-	i = 0;
-	while (to_free[i])
-	{
-		free(to_free[i]);
-		i++;
-	}
-	free(to_free);
-	return (ret);
-}
-
 int	cmd_path(char *cmd, char **envp, char **ret)
 {
-	int		path_i;
+	int	path_i;
 	char	**paths;
 	char	*paths_cpy;
-	int		find_ret;
+	int	find_ret;
 
 	path_i = path_index(envp);
 	if (path_i < 0)
