@@ -6,21 +6,23 @@
 #    By: akostian <akostian@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/19 13:20:29 by akostian          #+#    #+#              #
-#    Updated: 2024/12/18 16:19:51 by akostian         ###   ########.fr        #
+#    Updated: 2024/12/18 15:30:45 by vcaratti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 NAME					= minishell
 
-VPATH					= src:src/hm:src/parse:src/builtin
+VPATH					= src:src/hm:src/parse:src/builtin:src/exec
 
 SRC_DIR					= src
 SRCS					= main.c \
 						  parse.c process_arg.c get_var_length.c calculate_argc.c parse_utils.c \
 						  hm_free.c hm_get.c hm_set.c hm_init.c hm_delete.c hm_key_exists.c hm_sort_keys.c \
 						  ft_cd.c ft_echo.c ft_pwd.c ft_env.c ft_unset.c ft_export.c \
-						  free_arr.c
+						  free_arr.c \
+						  cmd_path.c exec_free.c exec_init.c exec_io.c exec_tools.c \
+						  list_tools.c executor.c
 
 INC_DIR					= include
 INCLUDES				= -I$(INC_DIR)
@@ -32,7 +34,7 @@ LIBFT					= $(LIBFT_DIR)/libft.a
 OBJS					= $(addprefix $(BUILD_DIR)/, $(SRCS:%.c=%.o))
 
 CC						= cc
-CFLAGS					= -Wall -Wextra -Werror -g3
+CFLAGS					= -Wall -Wextra -Werror -static-libasan
 
 NORMINETTE				= norminette
 NORMINETTE_FLAGS		= --use-gitignore
@@ -90,7 +92,7 @@ clean:
 fclean:
 	make fclean -C $(LIBFT_DIR)
 
-	$(RM) $(BUILD_DIR) $(NAMES)
+	$(RM) $(BUILD_DIR) $(NAME)
 #
 
 
