@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:46:02 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/18 15:50:56 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:26:08 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,32 +103,30 @@ int	pop_append(t_elist *args_head, t_elist *to_append)
 }
 
 int	fetch_redirect(t_elist *args_head, t_executor *current_exec)
-{	//check for <<
-	//WILL HAVE TO MODIFY THIS (alot).
-	if (!ft_strcmp(args_head->next->arg, "<")) // fix for ">" "out" && ">out"
+{
+	t_elist	*temp;
+	char	mode;
+
+	mode = 0;
+	if (!args_head->next->next)
+		return (1);//nothing after redirect
+	if (!ft_strcmp(args_head->next->arg, "<"))
 	{
-		if (pop_append(args_head, &(current_exec->infiles)))
-			return (1);
+		if (args_head->next->arg[1] == '<')
+			mode = 'h';
+		temp = list_pop(args_head->next->next);
+		temp->mode = mode;
+		list_append(&(current_exec->infiles), temp);
 	}
 	else if (!ft_strcmp(args_head->next->arg, ">"))
 	{
-		if (pop_append(args_head, &(current_exec->outfiles)))
-			return (1);
+		if (args_head->next->arg[1] == '>')
+			mode = 'a';
+		temp = list_pop(args_head->next->next);
+		temp->mode = mode;
+		list_append(&(current_exec->outfiles), temp);
 	}
-	else if (args_head->next->arg[0] == '<' && args_head->next->arg[1])
-	{
-		args_head->next->arg = trim_redirect(args_head->next->arg);
-		if (args_head->next->arg)
-			return (1);
-		list_append(&(current_exec->infiles), list_pop(args_head->next));
-	}
-	else if (args_head->next->arg[0] == '>' && args_head->next->arg[1])
-	{
-		args_head->next->arg = trim_redirect(args_head->next->arg);
-		if (args_head->next->arg)
-			return (1);
-		list_append(&(current_exec->outfiles), list_pop(args_head->next));
-	}
+	free_list_node(list_pop(args_head->next));
 	return (0);
 }
 

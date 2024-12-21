@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/17 15:03:09 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:54:53 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_elist
 	struct s_elist	*prev;
 	struct s_elist	*next;
 	char	*arg;
+	char	mode;
 }	t_elist;
 
 typedef	struct s_executor

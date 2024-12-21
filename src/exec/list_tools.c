@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:43:57 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/18 15:47:27 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:55:44 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	list_append_arg(t_elist *lst, char *arg)
 		return (1); // free;
 	current->next->prev = current;
 	current->next->next = 0;
+	current->next->mode = 0;
 	current->next->arg = ft_strdup(arg); //if og is dynamic or static;
 	if (!current->next->arg)
 		return (1);
