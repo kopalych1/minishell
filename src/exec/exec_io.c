@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:52:38 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/18 15:48:16 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/23 13:46:16 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ int	open_outfiles(t_elist *outfiles)
 		close(fd);
 		current = current->next;
 	}
-	fd = open(current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0777); // needs support for O_RDWR | O_APPEND
+	if (current->mode != 'a')
+		return (open(current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0777)); // needs support for O_RDWR | O_APPEND
+	fd = open(current->arg, O_RDWR | O_APPEND, 0777);
+	if (fd == -1)
+		fd = open(current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	return (fd);
 }
 

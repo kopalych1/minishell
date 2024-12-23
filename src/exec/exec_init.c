@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:46:02 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/19 16:26:08 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/23 10:38:28 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	fetch_redirect(t_elist *args_head, t_executor *current_exec)
 	mode = 0;
 	if (!args_head->next->next)
 		return (1);//nothing after redirect
-	if (!ft_strcmp(args_head->next->arg, "<"))
+	if (args_head->next->arg[0] == '<')
 	{
 		if (args_head->next->arg[1] == '<')
 			mode = 'h';
@@ -118,7 +118,7 @@ int	fetch_redirect(t_elist *args_head, t_executor *current_exec)
 		temp->mode = mode;
 		list_append(&(current_exec->infiles), temp);
 	}
-	else if (!ft_strcmp(args_head->next->arg, ">"))
+	else if (args_head->next->arg[0] == '>')
 	{
 		if (args_head->next->arg[1] == '>')
 			mode = 'a';
