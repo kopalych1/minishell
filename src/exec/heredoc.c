@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/23 14:57:54 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/24 14:04:25 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@ int	heredoc_routine(int fd, char *eof)
 			return (1);
 		if (!ft_strcmp(line, eof))//need to handle signal;
 			break;
-		if (write(fd, line, ft_strlen(line)) == -1)
-			return (1);
+		if (fd != -1)
+		{
+			if (write(fd, line, ft_strlen(line)) == -1)
+				return (1);
+		}
 		free(line);
 		
 	}

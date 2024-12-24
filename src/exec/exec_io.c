@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:52:38 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/23 14:07:16 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/24 14:10:46 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ int	open_infiles(t_elist *infiles)
 	fd = open(current->arg, O_RDONLY, 0777);
 	if (fd == -1)
 		return (perror(NULL), -2);
+	if (current->mode == 'd')
+		close(fd);
 	return (fd);
 }
 

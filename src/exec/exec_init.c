@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:46:02 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/23 10:38:28 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:40:41 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp)
 	(*ret)->pipes[1] = -1;
 	(*ret)->fds[0] = -1;
 	(*ret)->fds[1] = -1;
+	(*ret)->heredoc_p[0] = -1;
+	(*ret)->heredoc_p[1] = -1;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/19 15:54:53 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/24 13:40:02 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,15 @@ typedef	struct s_executor
 {
 	struct s_executor	*prev;
 	struct s_executor	*next;
-	t_elist				infiles;
-	t_elist				outfiles;
-	t_elist				exec_args;
-	t_cmd				cmd;
-	char				**envp;
-	int					fid;
-	int					pipes[2];
-	int					fds[2];
+	t_elist			infiles;
+	t_elist			outfiles;
+	t_elist			exec_args;
+	t_cmd			cmd;
+	char			**envp;
+	int			fid;
+	int			pipes[2];
+	int			fds[2];
+	int			heredoc_p[2];
 }	t_executor;
 
 //#===#		executor.c		#===#//

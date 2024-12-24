@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 11:37:53 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/18 15:45:12 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/24 14:35:05 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void	close_all(t_executor *exec)
 			close(exec->pipes[0]);
 		if (exec->pipes[1] != -1)
 			close(exec->pipes[1]);
+		if (exec->heredoc_p[0] != -1)
+			close(exec->heredoc_p[0]);
+		if (exec->heredoc_p[1] != -1)
+			close(exec->heredoc_p[1]);
 		exec = exec->next;
 	}
 }
@@ -41,7 +45,7 @@ int	pipe_dup(int pipe_fd, int fd)
 }
 
 int	exec_routine(t_executor *exec)
-{
+{//NEED TO CHECK FOR HERDOC PIPE
 		exec->fds[1] = open_outfiles(exec->outfiles.next);
 		exec->fds[0] = open_infiles(exec->infiles.next);
 		if (exec->fds[0] == -2 || exec->fds[1] == -2)
@@ -65,6 +69,56 @@ int	exec_routine(t_executor *exec)
 		return (0);
 }
 
+int	heredoc_check(t_elist **node, t_executor *exec)
+{
+	t_elist	*to_del;
+
+	if (!(*node)->next && (*node)->mode == 'h')
+	{
+		if (pipe(&(exec->heredoc_p)) ==  -1)
+			return (1);
+		if (heredoc(exec->heredoc_p[1], (*node)->arg))
+			return (1);
+		if ((*node)->prev)
+			(*node)->prev->mode = 'd';
+	}
+	else if ((*node)->mode == 'h')
+	{
+		if (heredoc(-1, (*node)->arg))
+			return (1);
+	}
+	if ((*node)->mode == 'h')
+	{
+		to_del = (*node);
+		(*node) = to_del->next;
+		free_list_node(list_pop(to_del));
+	}
+	return (0);
+}
+
+int	init_heredoc(t_executor *exec_head)
+{
+	t_elist	*current;
+	t_elist *to_del;
+
+	while (exec_head)
+	{
+		current = exec_head->infiles.next;
+		while (current)
+		{
+			if (current->mode == 'h')
+			{
+				if (heredoc_check(current, exec_head))
+					return (1);
+			}
+			else
+				current = current->next;
+		}
+		exec_head = exec_head->next;
+	}
+	return (0);
+}
+
 int	start_pipes(t_executor *exec_head)
 {
 	t_executor	*current;
@@ -73,6 +127,10 @@ int	start_pipes(t_executor *exec_head)
 		return (1);//free t_cmd? gotta watch out for copies and non-malloced
 	if (init_children_pipes(exec_head))
 		return (1);//
+	if (init_heredoc(exec_head))
+		return (1);
+	if (builtin_routine(exec_head))
+		return (1);
 	current = exec_head;
 	while (current)
 	{
