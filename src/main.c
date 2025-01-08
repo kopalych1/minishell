@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2024/12/19 12:34:24 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/08 13:51:46 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	route(
 	t_hashmap *env_variables,
 	char **envp
 )
-{
+{/*
 	if (!ft_strcmp(user_argv[0], "exit"))
 		return (1);
 	if (!ft_strcmp(user_argv[0], "cd"))
@@ -103,8 +103,12 @@ static int	route(
 		g_exit_code = ft_unset(env_variables, user_argc, user_argv);
 	if (!ft_strcmp(user_argv[0], "export"))
 		g_exit_code = ft_export(env_variables, user_argc, user_argv);
-	printf("%d\n", g_exit_code);
-	executor(user_argv, envp);
+	printf("%d\n", g_exit_code);*/
+	(void)user_argc;
+	int	exec_ret;
+	exec_ret = 0;
+	if (executor(user_argv, envp, env_variables, &exec_ret) == 1) // i have to handle this better, fix ret path of builtins
+		return (1);
 	return (0);
 }
 

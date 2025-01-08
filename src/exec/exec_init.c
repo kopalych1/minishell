@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:46:02 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/24 13:40:41 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/08 13:59:18 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,24 @@ int	init_children_pipes(t_executor *exec_head)
 int	init_cmd_args(t_executor *exec_head)
 {
 	t_executor	*current;
+	int		cmd_init_ret;
 
 	current = exec_head;
 	while (current)
-	{
-		if (treat_cmd(current))
-			return (1);
+	{	if (!is_builtin(current) && current->exec_args.next)
+		{
+			cmd_init_ret = treat_cmd(current);
+			if (cmd_init_ret == 3)
+				return (0);
+			if (cmd_init_ret)
+				return (1);
+		}
 		current = current->next;
 	}
 	return (0);
 }
 
-int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp)
+int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_hashmap *env_variables)
 {
 	*ret = malloc(sizeof(t_executor));
 	if (!(*ret))
@@ -60,6 +66,7 @@ int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp)
 	(*ret)->prev = p;
 	(*ret)->next = n;
 	(*ret)->envp = envp;
+	(*ret)->env_variables = env_variables;
 	(*ret)->infiles.next = 0;
 	(*ret)->infiles.prev = 0;
 	(*ret)->infiles.arg = 0;

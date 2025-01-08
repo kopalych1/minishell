@@ -6,13 +6,63 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/24 14:04:25 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/08 14:42:05 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/exec.h"
 
-int	heredoc_routine(int fd, char *eof)
+int	heredoc_check(t_elist **node, t_executor *exec)
+{
+	t_elist	*to_del;
+
+	if (!(*node)->next && (*node)->mode == 'h')
+	{
+		if (pipe((exec->heredoc_p)) ==  -1)
+			return (1);
+		if (heredoc(exec->heredoc_p[1], (*node)->arg))
+			return (1);
+		if ((*node)->prev)
+			(*node)->prev->mode = 'd';
+	}
+	else if ((*node)->mode == 'h')
+	{
+		if (heredoc(-1, (*node)->arg))
+			return (1);
+	}
+	if ((*node)->mode == 'h')
+	{
+		to_del = (*node);
+		(*node) = to_del->next;
+		free_list_node(list_pop(to_del));
+	}
+	return (0);
+}
+
+int	init_heredocs(t_executor *exec_head)
+{
+	t_elist	*current;
+
+	while (exec_head)
+	{
+		current = exec_head->infiles.next;
+		while (current)
+		{
+			if (current->mode == 'h')
+			{
+				if (heredoc_check(&current, exec_head))
+					return (1);
+				exec_head->heredoc_p[1] = -1;
+			}
+			else
+				current = current->next;
+		}
+		exec_head = exec_head->next;
+	}
+	return (0);
+}
+
+void	heredoc_routine(int fd, char *eof)
 {
 	char	*line;
 
@@ -20,19 +70,22 @@ int	heredoc_routine(int fd, char *eof)
 	{
 		line = readline(">");
 		if (!line)
-			return (1);
+			exit(1);
 		if (!ft_strcmp(line, eof))//need to handle signal;
 			break;
+		line = ft_strjoin(line, "\n");
+		if (!line)
+			exit(1);
 		if (fd != -1)
 		{
 			if (write(fd, line, ft_strlen(line)) == -1)
-				return (1);
+				exit(1);
 		}
 		free(line);
 		
 	}
 	close(fd);
-	return (0);
+	exit(0);
 }
 
 int	heredoc(int fd, char *eof)
@@ -45,6 +98,7 @@ int	heredoc(int fd, char *eof)
 		return (1);
 	if (child == 0)
 		heredoc_routine(fd, eof);
+	close(fd);
 	waitpid(child, &ret, WCONTINUED);
 	return (ret);
 }

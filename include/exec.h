@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/24 13:40:02 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/08 14:48:44 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 # define EXEC_H
 
 # include "../libft/include/libft.h"
-# include "stdlib.h"
-# include "stdio.h"
-# include "sys/wait.h"
-# include "sys/types.h"
+# include "hashmap.h"
+# include "minishell.h"
+# include <readline/readline.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <sys/wait.h>
+# include <sys/types.h>
 
 typedef struct s_cmd
 {
@@ -42,17 +45,22 @@ typedef	struct s_executor
 	t_elist			exec_args;
 	t_cmd			cmd;
 	char			**envp;
+	t_hashmap		*env_variables;
 	int			fid;
 	int			pipes[2];
 	int			fds[2];
 	int			heredoc_p[2];
 }	t_executor;
 
+
+int	is_builtin(t_executor *exec);
+
+
 //#===#		executor.c		#===#//
 
 int	exec_routine(t_executor *exec);
-int	start_pipes(t_executor *exec_head);
-int	executor(char **args, char **envp);
+int	start_pipes(t_executor **exec_head);
+int	executor(char **args, char **envp, t_hashmap *env_variables, int *exec_ret);
 
 //#===#		exec_free.c		#===#//
 
@@ -74,6 +82,7 @@ int	cmd_path(char *cmd, char **envp, char **ret);
 
 int	list_len(t_elist *head);
 char	**list_to_arr(t_elist *head);
+char	**list_to_arr_dup(t_elist *head);
 t_elist	*list_pop(t_elist *elem);
 int	list_append_arg(t_elist *lst, char *arg);
 void	list_append(t_elist *lst, t_elist *node);
@@ -82,7 +91,7 @@ void	list_append(t_elist *lst, t_elist *node);
 
 int	init_children_pipes(t_executor *exec_head);
 int	init_cmd_args(t_executor *exec_head);
-int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp);
+int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_hashmap *env_variables);
 int	fetch_redirect(t_elist *current, t_executor *current_exec);
 int	list_init(t_elist *args_head, char **args);
 
@@ -94,8 +103,21 @@ int	get_nb_exec(t_executor *exec_head);
 
 //#===#		exec_io.c		#===#//
 
-int	open_outfiles(t_elist *outfiles);
-int	open_infiles(t_elist *infiles);
+int	open_outfiles(t_executor *exec);
+int	open_infiles(t_executor *exec);
 void	close_all_except(t_executor *exec);
+
+//#===#		heredoc.c		#===#//
+
+int	heredoc_check(t_elist **node, t_executor *exec);
+int	init_heredocs(t_executor *exec_head);
+int	heredoc(int fd, char *eof);
+
+//#===#		exec_builtins.c		#===#//
+
+int	is_builtin(t_executor *exec);
+int	ft_arr_len(char **arr);
+int	route_builtin(t_executor *exec, char **argv);
+int	builtin_routine(t_executor *exec);
 
 #endif

@@ -6,18 +6,18 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:52:38 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/24 14:10:46 by vcaratti         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:20:43 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/exec.h"
 
-int	open_outfiles(t_elist *outfiles)
+int	open_outfiles(t_executor *exec)
 {
 	t_elist	*current;
 	int	fd;
 
-	current = outfiles;
+	current = exec->outfiles.next;
 	if (!current)
 		return (-1);
 	while (current->next)
@@ -38,12 +38,12 @@ int	open_outfiles(t_elist *outfiles)
 	return (fd);
 }
 
-int	open_infiles(t_elist *infiles)
+int	open_infiles(t_executor *exec)
 {
 	t_elist	*current;
 	int	fd;
 
-	current = infiles;
+	current = exec->infiles.next;
 	if (!current)
 		return (-1);
 	while (current->next)
@@ -58,10 +58,15 @@ int	open_infiles(t_elist *infiles)
 	if (fd == -1)
 		return (perror(NULL), -2);
 	if (current->mode == 'd')
+	{
 		close(fd);
+		return (-1);
+		//fd = exec->heredoc_p[0];
+		//exec->heredoc_p[0] = -1;
+	}
 	return (fd);
 }
-
+/*
 void	close_all_except(t_executor *exec)
 {
 	t_executor	*current;
@@ -81,6 +86,10 @@ void	close_all_except(t_executor *exec)
 			close(current->pipes[0]);
 		if (current->pipes[1] > -1)
 			close(current->pipes[1]);
+		if (current->heredoc_p[0] > -1)
+			close(current->heredoc_p[0]);
+		if (current->heredoc_p[1] > -1)
+			close(current->heredoc_p[1]);
 		current = current->next;
 	}
-}
+}*/

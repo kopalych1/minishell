@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:26:08 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/18 13:05:50 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/07 13:49:49 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_list(t_elist *head)
 		free(current);
 		current = next;
 	}
-	
+	head->next = 0;
 }
 
 void	free_nt_arr(char **arr)

@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:43:57 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/19 15:55:44 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:26:06 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,40 @@ char	**list_to_arr(t_elist *head)
 	{
 		ret[i] = current->arg;
 		current->arg = 0;
+		i++;
+		current = current->next;
+	}
+	ret[i] = 0;
+	return (ret);
+}
+
+
+void	rev_free(char **arr, int i)
+{
+	while (i >= 0)
+		free(arr[i--]);
+}
+
+char	**list_to_arr_dup(t_elist *head)
+{
+	char		**ret;
+	int		i;
+	int		len;
+	t_elist	*current;
+
+	if (!head)
+		return (NULL);
+	len = list_len(head);
+	ret = malloc(sizeof(char *) * (len + 1));
+	if (!ret)
+		return (NULL);
+	i = 0;
+	current = head;
+	while (current)
+	{
+		ret[i] = ft_strdup(current->arg);
+		if (!ret[i])
+			return (rev_free(ret, i - 1), NULL);
 		i++;
 		current = current->next;
 	}

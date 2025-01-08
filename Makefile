@@ -6,7 +6,7 @@
 #    By: akostian <akostian@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/19 13:20:29 by akostian          #+#    #+#              #
-#    Updated: 2024/12/18 15:30:45 by vcaratti         ###   ########.fr        #
+#    Updated: 2025/01/08 14:46:57 by vcaratti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRCS					= main.c \
 						  ft_cd.c ft_echo.c ft_pwd.c ft_env.c ft_unset.c ft_export.c \
 						  free_arr.c \
 						  cmd_path.c exec_free.c exec_init.c exec_io.c exec_tools.c \
-						  list_tools.c executor.c
+						  list_tools.c heredoc.c exec_builtins.c executor.c
 
 INC_DIR					= include
 INCLUDES				= -I$(INC_DIR)
