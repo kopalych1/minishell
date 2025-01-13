@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/08 14:42:05 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:45:17 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,35 @@ int	init_heredocs(t_executor *exec_head)
 	return (0);
 }
 
+void	handle_interupt(int signum)
+{
+	if (signum == SIGINT || signum == 130)
+	{
+		//ft_printf("\n");
+		//rl_replace_line("", 0);
+		//rl_on_new_line();
+		//rl_redisplay();
+		//printf("wut?");fflush(stdout);
+		if (signum == SIGINT)
+			exit(0);
+		exit(130); // return code, needs to be in global?
+	}
+}
+
 void	heredoc_routine(int fd, char *eof)
 {
 	char	*line;
 
+	signal(SIGINT, handle_interupt);
+	signal(SIGQUIT, handle_interupt);
 	while (1)
 	{
 		line = readline(">");
 		if (!line)
-			exit(1);
-		if (!ft_strcmp(line, eof))//need to handle signal;
+			handle_interupt(130);
+		//if (!line)
+		//	exit(2); // non error case, when ctrl-D is pressed;
+		if (!ft_strcmp(line, eof))
 			break;
 		line = ft_strjoin(line, "\n");
 		if (!line)
@@ -79,7 +98,10 @@ void	heredoc_routine(int fd, char *eof)
 		if (fd != -1)
 		{
 			if (write(fd, line, ft_strlen(line)) == -1)
-				exit(1);
+			{
+				free(line);
+				exit(1);//i need to free the line
+			}
 		}
 		free(line);
 		
@@ -100,5 +122,6 @@ int	heredoc(int fd, char *eof)
 		heredoc_routine(fd, eof);
 	close(fd);
 	waitpid(child, &ret, WCONTINUED);
-	return (ret);
+	//RET IS FOR GLOBAL, NEED TO IMPL THIS
+	return (0);
 }

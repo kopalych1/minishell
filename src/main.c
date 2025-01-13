@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/08 13:51:46 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:25:31 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,12 +139,11 @@ static int	minishell_interactive(
 	int		user_argc;
 	char	**user_argv;
 
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, signal_handler);
-
 	using_history();
 	while (1)
 	{
+		signal(SIGINT, signal_handler);
+		signal(SIGQUIT, signal_handler);
 		promt = generate_promt(env_variables);
 		if (!promt)
 			return (ENOMEM);
