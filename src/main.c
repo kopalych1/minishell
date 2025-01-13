@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/09 13:25:31 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/13 12:10:51 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../include/exec.h"
 #include "../include/hashmap.h"
 
-unsigned char	g_exit_code = 0;
+unsigned char	g_exit_code;
 
 int	fill_env_variables(t_hashmap *env_variables)
 {

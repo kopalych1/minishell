@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 04:04:01 by akostian          #+#    #+#             */
-/*   Updated: 2024/12/18 16:01:09 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:26:57 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static ssize_t	calc_vars_size(char *arg, t_hashmap *env_variables)
 }
 
 // Inserts env variables, removes quotes from every argument
-static int	post_process_argv(
+int	post_process_argv(
 					char ***argv,
 					const size_t argc,
 					t_hashmap *env_variables

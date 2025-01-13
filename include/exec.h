@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/08 14:48:44 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:38:41 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,9 @@ void	free_list_node(t_elist *list);
 //#===#		cmd_path.c		#===#//
 
 int	treat_cmd(t_executor *exec);
-int	path_index(char **envp);
 char	*join_path_cmd(char *path, char *cmd);
 int	find_path(char *cmd, char **paths, char **ret);
-int	cmd_path(char *cmd, char **envp, char **ret);
+int	cmd_path(char *cmd, t_hashmap *env_variables, char **ret);
 
 //#===#		list_tools.c	#===#//
 
@@ -111,7 +110,7 @@ void	close_all_except(t_executor *exec);
 
 int	heredoc_check(t_elist **node, t_executor *exec);
 int	init_heredocs(t_executor *exec_head);
-int	heredoc(int fd, char *eof);
+int	heredoc(int fd, char *eof, t_hashmap *env);
 
 //#===#		exec_builtins.c		#===#//
 

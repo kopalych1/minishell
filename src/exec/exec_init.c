@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:46:02 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/08 13:59:18 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:14:34 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_h
 		return (1);
 	(*ret)->prev = p;
 	(*ret)->next = n;
-	(*ret)->envp = envp;
+	(*ret)->envp = hm_to_array(env_variables);
+	(void)envp;
+	if (!(*ret)->envp)
+		return (free(*ret), 1);
 	(*ret)->env_variables = env_variables;
 	(*ret)->infiles.next = 0;
 	(*ret)->infiles.prev = 0;

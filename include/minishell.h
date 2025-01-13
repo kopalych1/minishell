@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:41 by akostian          #+#    #+#             */
-/*   Updated: 2024/12/18 16:18:58 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:27:25 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ char			*process_arg(
 					size_t size,
 					t_hashmap *env_variables
 					);
+int			post_process_argv(
+					char ***argv,
+					const size_t argc,
+					t_hashmap *env_variables
+);
 
 /*  */
 

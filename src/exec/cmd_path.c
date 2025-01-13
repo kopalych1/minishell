@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 11:51:55 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/18 15:51:35 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/13 12:36:13 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	treat_cmd(t_executor *exec)
 	ret->args = list_to_arr(exec->exec_args.next);
 	if (ret->args == NULL || ret->args[0] == NULL)
 		return (1);
-	path_return = cmd_path(ret->args[0], exec->envp, &(ret->path));
+	path_return = cmd_path(ret->args[0], exec->env_variables, &(ret->path));
 	if (path_return == -1)
 		return (2);
 	if (path_return == -2)
@@ -30,23 +30,6 @@ int	treat_cmd(t_executor *exec)
 		return (3);
 	}
 	return (0);
-}
-
-int	path_index(char **envp)
-{
-	int	i;
-
-	i = 0;
-	if (!envp || !envp[0])
-		return (write(2, "env not set\n", 12), -1);
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			return (i);
-		i++;
-	}
-	write(2, "PATH not found\n", 15);
-	return (-1);
 }
 
 char	*join_path_cmd(char *path, char *cmd)
@@ -96,29 +79,27 @@ int	find_path(char *cmd, char **paths, char **ret)
 	return (-2);
 }
 
-int	cmd_path(char *cmd, char **envp, char **ret)
+int	cmd_path(char *cmd, t_hashmap *env_variables, char **ret)
 {
-	int	path_i;
+	char	*env_path;
 	char	**paths;
-	char	*paths_cpy;
 	int	find_ret;
 
-	path_i = path_index(envp);
-	if (path_i < 0)
+	if (access(cmd, X_OK) == 0)
+	{
+		*ret = ft_strdup(cmd);
+		return (0);
+	}
+	env_path = env_variables->get(env_variables, "PATH");
+	if (!env_path)
 		return (-1);
-	paths = ft_split(envp[path_i], '=');
+	paths = ft_split(env_path, ':');
 	if (paths == NULL)
-		return (-1);
-	free(paths[0]);
-	paths_cpy = paths[1];
-	free(paths);
-	paths = ft_split(paths_cpy, ':');
-	if (paths == NULL)
-		return (free(paths_cpy), -1);
+		return ( -1);
 	find_ret = find_path(cmd, paths, ret);
 	if (find_ret == -1)
-		return (free(paths_cpy), free_and_ret(paths, -1));
+		return (free_and_ret(paths, -1));
 	if (find_ret == -2)
-		return (free(paths_cpy), free_and_ret(paths, -2));
-	return (free(paths_cpy), free_and_ret(paths, 0));
+		return (free_and_ret(paths, -2));
+	return (free_and_ret(paths, 0));
 }

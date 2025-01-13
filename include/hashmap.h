@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:28:22 by akostian          #+#    #+#             */
-/*   Updated: 2024/11/12 13:19:10 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:07:57 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ void		hm_free(t_hashmap *hm);
 int			hm_delete(t_hashmap *hm, const char *key);
 ssize_t		hm_key_exists(t_hashmap *hm, const char *key);
 void		hm_sort_keys(t_hashmap *hm);
+char		**hm_to_array(t_hashmap *hm);
 
 #endif

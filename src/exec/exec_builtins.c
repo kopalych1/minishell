@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:43:03 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/08 14:45:43 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/13 12:05:23 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	route_builtin(t_executor *exec, char **argv)
 	char	*arg;
 
 	arg = exec->exec_args.next->arg;
+	//printf("routing builtin: '%s' param: '%s'\n", arg, argv[1]);fflush(stdout);
 	if (!ft_strcmp(arg, "cd")) // THERE IS MORE TO IT IN THE MAIN(), CHECK OUT
 		return (ft_cd(exec->env_variables, ft_arr_len(argv), argv));
 	else if (!ft_strcmp(arg, "echo"))

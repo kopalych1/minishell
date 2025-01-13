@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/09 13:45:17 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:51:43 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ int	heredoc_check(t_elist **node, t_executor *exec)
 	{
 		if (pipe((exec->heredoc_p)) ==  -1)
 			return (1);
-		if (heredoc(exec->heredoc_p[1], (*node)->arg))
+		if (heredoc(exec->heredoc_p[1], (*node)->arg, exec->env_variables))
 			return (1);
 		if ((*node)->prev)
 			(*node)->prev->mode = 'd';
 	}
 	else if ((*node)->mode == 'h')
 	{
-		if (heredoc(-1, (*node)->arg))
+		if (heredoc(-1, (*node)->arg, exec->env_variables))
 			return (1);
 	}
 	if ((*node)->mode == 'h')
@@ -77,40 +77,47 @@ void	handle_interupt(int signum)
 	}
 }
 
-void	heredoc_routine(int fd, char *eof)
+void	heredoc_routine(int fd, char *eof, t_hashmap *env)
 {
 	char	*line;
+	char	**arr;
+	int	ret;
 
 	signal(SIGINT, handle_interupt);
 	signal(SIGQUIT, handle_interupt);
 	while (1)
 	{
+		arr = malloc(sizeof(char *));
+		if (!arr)
+			exit(1);
 		line = readline(">");
 		if (!line)
 			handle_interupt(130);
-		//if (!line)
-		//	exit(2); // non error case, when ctrl-D is pressed;
 		if (!ft_strcmp(line, eof))
 			break;
-		line = ft_strjoin(line, "\n");
-		if (!line)
-			exit(1);
-		if (fd != -1)
-		{
-			if (write(fd, line, ft_strlen(line)) == -1)
-			{
-				free(line);
-				exit(1);//i need to free the line
-			}
-		}
+		arr[0] = ft_strjoin(line, "\n");
 		free(line);
-		
+		if (!arr[0])
+		{
+			free(arr);
+			exit(1);
+		}
+		ret = 0;
+		if (fd != -1)
+		{	
+			if (post_process_argv(&arr, 1, env) == -1)
+				ret = 1;
+			else if (write(fd, arr[0], ft_strlen(arr[0])) == -1)
+				ret = 1;
+		}
+		free(arr[0]);
+		free(arr);
 	}
 	close(fd);
-	exit(0);
+	exit(ret);
 }
 
-int	heredoc(int fd, char *eof)
+int	heredoc(int fd, char *eof, t_hashmap *env)
 {
 	int	child;
 	int	ret;
@@ -119,7 +126,7 @@ int	heredoc(int fd, char *eof)
 	if (child == -1)
 		return (1);
 	if (child == 0)
-		heredoc_routine(fd, eof);
+		heredoc_routine(fd, eof, env);
 	close(fd);
 	waitpid(child, &ret, WCONTINUED);
 	//RET IS FOR GLOBAL, NEED TO IMPL THIS
