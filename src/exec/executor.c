@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 11:37:53 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/13 14:17:19 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:47:18 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,15 @@ int	pipe_dup(int pipe_fd, int fd)
 
 int	exec_routine(t_executor *exec)
 {
+		//printf("in cmd: %s\n", exec->cmd.path);fflush(stdout);
 		exec->fds[1] = open_outfiles(exec);
 		exec->fds[0] = open_infiles(exec);
+		if (exec->bad_command == 1)
+		{
+			close_all(exec);
+			ft_printf("Command not found\n");fflush(stdout);
+			exit(127);
+		}
 		if (exec->fds[0] == -2 || exec->fds[1] == -2)
 			return (1);//
 		if (exec->fds[0] == -1)
@@ -69,7 +76,7 @@ int	exec_routine(t_executor *exec)
 		else if (dup2(exec->fds[1], 1) == -1)
 			return (5);
 		close_all(exec);
-		if (!exec->cmd.path && !exec->exec_args.next)//just redirects
+		if ((!exec->cmd.path && !exec->exec_args.next))//just redirects
 			exit(0);
 		if (!exec->cmd.path && exec->exec_args.next)//builtin
 			exit(builtin_routine(exec));
@@ -77,20 +84,32 @@ int	exec_routine(t_executor *exec)
 		return (0);
 }
 
+void	ignore_signal(int signum)
+{
+	(void)signum;
+}
+
 int	start_pipes(t_executor **exec_head)
 {
 	t_executor	*current;
 	int		cmd_init_ret;
+	int		hd_ret;
 
+	signal(SIGINT, ignore_signal);
+	signal(SIGKILL, ignore_signal);
+	hd_ret = init_heredocs(*exec_head);
+	if (hd_ret == 1)
+		return (1);
+	else if (hd_ret == 2)
+		return (0);
 	cmd_init_ret = init_cmd_args(*exec_head);
+	//printf("cmd ret: %d\n", cmd_init_ret); fflush(stdout);
 	if (cmd_init_ret == 1) //PROBLEM WITH BUILTINS
 		return (1);//free t_cmd? gotta watch out for copies and non-malloced
 	if (cmd_init_ret == 2)
 		return (0);//bad command
 	if (init_children_pipes(*exec_head))
 		return (1);//
-	if (init_heredocs(*exec_head))
-		return (1);
 	current = *exec_head;
 	while (current)
 	{
@@ -102,6 +121,7 @@ int	start_pipes(t_executor **exec_head)
 			if (exec_routine(current))
 				exit(1);
 		}
+		
 		current = current->next;
 	}
 	return (0);

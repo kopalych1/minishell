@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 11:51:55 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/13 12:36:13 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:12:49 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	treat_cmd(t_executor *exec)
 		return (2);
 	if (path_return == -2)
 	{
-		write(2, "Command not found\n", 18);
-		return (3);
+		exec->bad_command = 1;
+	//	write(2, "Command not found\n", 18);
 	}
 	return (0);
 }

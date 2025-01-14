@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/13 14:38:41 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:08:48 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef	struct s_executor
 	int			pipes[2];
 	int			fds[2];
 	int			heredoc_p[2];
+	int			bad_command;
 }	t_executor;
 
 

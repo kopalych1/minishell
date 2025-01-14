@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:46:02 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/13 14:14:34 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:09:57 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	init_cmd_args(t_executor *exec_head)
 	{	if (!is_builtin(current) && current->exec_args.next)
 		{
 			cmd_init_ret = treat_cmd(current);
-			if (cmd_init_ret == 3)
-				return (0);
+			//if (cmd_init_ret == 3)
+			//	return (0);
 			if (cmd_init_ret)
 				return (1);
 		}
@@ -86,6 +86,7 @@ int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_h
 	(*ret)->fds[1] = -1;
 	(*ret)->heredoc_p[0] = -1;
 	(*ret)->heredoc_p[1] = -1;
+	(*ret)->bad_command = 0;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/13 14:51:43 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:47:36 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,23 @@
 int	heredoc_check(t_elist **node, t_executor *exec)
 {
 	t_elist	*to_del;
+	int	hd_ret;
 
 	if (!(*node)->next && (*node)->mode == 'h')
 	{
 		if (pipe((exec->heredoc_p)) ==  -1)
 			return (1);
-		if (heredoc(exec->heredoc_p[1], (*node)->arg, exec->env_variables))
-			return (1);
+		hd_ret = heredoc(exec->heredoc_p[1], (*node)->arg, exec->env_variables);
+		if (hd_ret)
+			return (hd_ret);
 		if ((*node)->prev)
 			(*node)->prev->mode = 'd';
 	}
 	else if ((*node)->mode == 'h')
 	{
-		if (heredoc(-1, (*node)->arg, exec->env_variables))
-			return (1);
+		hd_ret = heredoc(-1, (*node)->arg, exec->env_variables);
+		if (hd_ret)
+			return (hd_ret);
 	}
 	if ((*node)->mode == 'h')
 	{
@@ -42,6 +45,7 @@ int	heredoc_check(t_elist **node, t_executor *exec)
 int	init_heredocs(t_executor *exec_head)
 {
 	t_elist	*current;
+	int	hd_ret;
 
 	while (exec_head)
 	{
@@ -50,8 +54,9 @@ int	init_heredocs(t_executor *exec_head)
 		{
 			if (current->mode == 'h')
 			{
-				if (heredoc_check(&current, exec_head))
-					return (1);
+				hd_ret = heredoc_check(&current, exec_head);
+				if (hd_ret)
+					return (hd_ret);
 				exec_head->heredoc_p[1] = -1;
 			}
 			else
@@ -72,7 +77,8 @@ void	handle_interupt(int signum)
 		//rl_redisplay();
 		//printf("wut?");fflush(stdout);
 		if (signum == SIGINT)
-			exit(0);
+			exit(1);
+		printf("minishell: warning: here-document delimited by end-of-file\n");
 		exit(130); // return code, needs to be in global?
 	}
 }
@@ -129,6 +135,8 @@ int	heredoc(int fd, char *eof, t_hashmap *env)
 		heredoc_routine(fd, eof, env);
 	close(fd);
 	waitpid(child, &ret, WCONTINUED);
+	if (ret == 256)
+		return (2);
 	//RET IS FOR GLOBAL, NEED TO IMPL THIS
 	return (0);
 }
