@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:41 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/13 14:27:25 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/15 14:42:31 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 
 # include "../libft/include/libft.h"
 # include "hashmap.h"
+# include "get_next_line.h"
 
 void			free_arr_str(char **arr);
 void			free_arr_n(void **arr, size_t n);
@@ -57,6 +58,7 @@ int			post_process_argv(
 					const size_t argc,
 					t_hashmap *env_variables
 );
+char			*pipe_readline(t_hashmap *env);
 
 /*  */
 

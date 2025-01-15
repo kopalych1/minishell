@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/14 12:47:36 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:49:27 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	init_heredocs(t_executor *exec_head)
 	return (0);
 }
 
-void	handle_interupt(int signum)
+static void	handle_interupt(int signum)
 {
 	if (signum == SIGINT || signum == 130)
 	{
@@ -83,7 +83,7 @@ void	handle_interupt(int signum)
 	}
 }
 
-void	heredoc_routine(int fd, char *eof, t_hashmap *env)
+static void	heredoc_routine(int fd, char *eof, t_hashmap *env)
 {
 	char	*line;
 	char	**arr;

@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/14 12:08:48 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/15 14:42:48 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../libft/include/libft.h"
 # include "hashmap.h"
 # include "minishell.h"
+# include "get_next_line.h"
 # include <readline/readline.h>
 # include <stdlib.h>
 # include <stdio.h>
