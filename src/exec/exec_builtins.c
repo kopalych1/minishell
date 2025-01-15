@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:43:03 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 12:31:53 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:22:21 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	is_builtin(t_executor *exec)
 			|| !ft_strcmp(exec->exec_args.next->arg, "echo")
 			|| !ft_strcmp(exec->exec_args.next->arg, "env")
 			|| !ft_strcmp(exec->exec_args.next->arg, "export")
+			|| !ft_strcmp(exec->exec_args.next->arg, "unset")
 			|| !ft_strcmp(exec->exec_args.next->arg, "pwd")
 			|| !ft_strcmp(exec->exec_args.next->arg, "exit"))
 		return (1);

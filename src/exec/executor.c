@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 11:37:53 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 15:14:19 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:35:23 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,39 @@ void	ignore_signal(int signum)
 	(void)signum;
 }
 
+int	is_special_builtin(t_executor *exec)
+{
+	if (!exec->exec_args.next)
+		return (0);
+	if (!exec->exec_args.next->arg)
+		return (0);
+	if (!ft_strcmp(exec->exec_args.next->arg, "cd") 
+			|| !ft_strcmp(exec->exec_args.next->arg, "export")
+			|| !ft_strcmp(exec->exec_args.next->arg, "unset"))
+		return (1);
+	return (0);
+}
+
+int	look_for_builtin(t_executor *exec_head)
+{
+	char	**argv;
+	int	ret;
+
+	if (exec_head->next || !is_special_builtin(exec_head))
+		return (0);
+	argv = list_to_arr_dup(exec_head->exec_args.next);
+	if (!argv)
+		return (1);
+	if (!ft_strcmp(exec_head->exec_args.next->arg, "cd"))
+		ret = ft_cd(exec_head->env_variables, ft_arr_len(argv), argv);
+	else if (!ft_strcmp(exec_head->exec_args.next->arg, "export"))
+		ret = ft_export(exec_head->env_variables, ft_arr_len(argv), argv);
+	else if (!ft_strcmp(exec_head->exec_args.next->arg, "unset"))
+		ret = ft_unset(exec_head->env_variables, ft_arr_len(argv), argv);
+	free_nt_arr(argv);
+	return (ret);
+}
+
 int	start_pipes(t_executor **exec_head)
 {
 	t_executor	*current;
@@ -97,6 +130,10 @@ int	start_pipes(t_executor **exec_head)
 
 	signal(SIGINT, ignore_signal);
 	signal(SIGKILL, ignore_signal);
+	int ret = look_for_builtin(*exec_head);
+	printf("ret: %d\n", ret);
+	//if (look_for_builtin(*exec_head))
+	//	return (1);
 	hd_ret = init_heredocs(*exec_head);
 	if (hd_ret == 1)
 		return (1);
