@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:43:03 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/13 12:05:23 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:31:53 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ int	builtin_routine(t_executor *exec)
 		return (1);
 	if ((!ft_strcmp(arg, "cd") || !ft_strcmp(arg, "export") || !ft_strcmp(arg, "unset")
 		|| !ft_strcmp(arg, "exit")) && (exec->prev || exec->next))
-		return (0);
+		return (free_nt_arr(argv), 0);
 	ret = route_builtin(exec, argv);
-	free(argv);
+	free_nt_arr(argv);
 	return (ret);
 }
 

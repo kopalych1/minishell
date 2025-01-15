@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 11:37:53 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/14 12:47:18 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:46:09 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,17 +211,21 @@ int	executor(char **args, char **envp, t_hashmap *env_variables, int *exec_ret)
 	if (create_exec(&exec_head, 0, 0, envp, env_variables))
 		return (free_list(&args_head), 1);//?
 	parse_ret = parse_args(exec_head, &args_head, envp, env_variables);
+	free_list(&args_head);
 	if (parse_ret == 2)
-		return (write(1,"syntax error near unexpected token '|'\n", 39), 0); //for unexpected token
+		return (write(1,"syntax error near unexpected token '|'\n", 39),free_all(exec_head), 0); //for unexpected token
 	else if (parse_ret)
-		return (1);
+		return (free_all(exec_head), 1);
 	if (start_pipes(&exec_head))
 		return (free_all(exec_head), 1);//free
 	*exec_ret = close_wait(exec_head);
 	if (is_builtin(exec_head) && !exec_head->next)
 	{
 		if (!ft_strcmp(exec_head->exec_args.next->arg, "exit"))
+		{
+			free_all(exec_head);
 			exit(0);//?
+		}
 	}
 	free_all(exec_head);
 	return (0);	
