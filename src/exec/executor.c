@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 11:37:53 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 15:35:23 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:21:42 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	pipe_dup(int pipe_fd, int fd)
 
 int	exec_routine(t_executor *exec)
 {
-		//printf("in cmd: %s\n", exec->cmd.path);fflush(stdout);
 		exec->fds[1] = open_outfiles(exec);
 		exec->fds[0] = open_infiles(exec);
 		if (exec->bad_command == 1)
@@ -130,17 +129,14 @@ int	start_pipes(t_executor **exec_head)
 
 	signal(SIGINT, ignore_signal);
 	signal(SIGKILL, ignore_signal);
-	int ret = look_for_builtin(*exec_head);
-	printf("ret: %d\n", ret);
-	//if (look_for_builtin(*exec_head))
-	//	return (1);
+	if (look_for_builtin(*exec_head))
+		return (0);
 	hd_ret = init_heredocs(*exec_head);
 	if (hd_ret == 1)
 		return (1);
 	else if (hd_ret == 2)
 		return (0);
 	cmd_init_ret = init_cmd_args(*exec_head);
-	//printf("cmd ret: %d\n", cmd_init_ret); fflush(stdout);
 	if (cmd_init_ret == 1) //PROBLEM WITH BUILTINS
 		return (1);//free t_cmd? gotta watch out for copies and non-malloced
 	if (cmd_init_ret == 2)

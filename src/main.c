@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/13 12:10:51 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:58:00 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "../include/hashmap.h"
 
 unsigned char	g_exit_code;
-
+/*
 int	fill_env_variables(t_hashmap *env_variables)
 {
 	if (env_variables->set(env_variables, "PATH", getenv("PATH"), 0) == -1)
@@ -32,7 +32,32 @@ int	fill_env_variables(t_hashmap *env_variables)
 		return (ENOMEM);
 	return (0);
 }
+*/
 
+int	fill_env_variables(t_hashmap *env_variables, char **envp)
+{
+	size_t	i;
+	size_t	j;
+	char	*key;
+	char	*value;
+
+	i = 0;
+	while (envp[i])
+	{
+		j = 0;
+		while (envp[i][j] && envp[i][j] != '=')
+			j++;
+		key = ft_substr(envp[i], 0, j);
+		value = envp[i] + j + 1;
+		if (!key || !value)
+			return (-1);
+		if (env_variables->set(env_variables, key, value, 0) == -1)
+			return (-1);
+		free(key);
+		i++;
+	}
+	return (0);
+}
 void	append_str(char **str1, char *str2)
 {
 	char	*old_str;
@@ -82,6 +107,9 @@ static int	route(
 	t_hashmap *env_variables,
 	char **envp
 )
+
+//NEED TO IMPLEMENT BELOW FOR CD
+
 {/*
 	if (!ft_strcmp(user_argv[0], "exit"))
 		return (1);
@@ -180,7 +208,7 @@ int	main(int argc, char **argv, char **envp)
 	if ((argc < 1) || (argc > 3))
 		return (0);
 	hm_init(&env_variables);
-	if (fill_env_variables(&env_variables))
+	if (fill_env_variables(&env_variables, envp))
 		return (ENOMEM);
 	if (argc == 3)
 		minishell_noninteractive(argv[2], &env_variables, envp);
@@ -188,31 +216,6 @@ int	main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-/*
 
-Code to insert every env varialbe passed into main() inside env_variables
 
-int	fill_env_variables(t_hashmap *env_variables, char **envp)
-{
-	size_t	i;
-	size_t	j;
-	char	*key;
-	char	*value;
-
-	i = 0;
-	while (envp[i])
-	{
-		j = 0;
-		while (envp[i][j] && envp[i][j] != '=')
-			j++;
-		key = ft_substr(envp[i], 0, j);
-		value = envp[i] + j + 1;
-		if (!key || !value)
-			return (-1);
-		if (env_variables->set(env_variables, key, value, 0) == -1)
-			return (-1);
-		free(key);
-		i++;
-	}
-	return (0);
-} */
+//Code to insert every env varialbe passed into main() inside env_variables

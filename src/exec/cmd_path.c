@@ -6,11 +6,22 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 11:51:55 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/14 12:12:49 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:22:34 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/exec.h"
+
+int	has_whitespace(char *str)
+{
+	while (*str)
+	{
+		if (ft_isspace(*str))
+			return (1);
+		str++;
+	}
+	return (0);
+}
 
 int	treat_cmd(t_executor *exec)
 {
@@ -18,17 +29,20 @@ int	treat_cmd(t_executor *exec)
 	t_cmd	*ret;
 	
 	ret = &(exec->cmd);
-	ret->args = list_to_arr(exec->exec_args.next);
+	if (has_whitespace(exec->exec_args.next->arg))
+	{
+		ret->args = ft_split(exec->exec_args.next->arg, ' ');
+		free_list(exec->exec_args.next);
+	}
+	else
+		ret->args = list_to_arr(exec->exec_args.next);
 	if (ret->args == NULL || ret->args[0] == NULL)
 		return (1);
 	path_return = cmd_path(ret->args[0], exec->env_variables, &(ret->path));
 	if (path_return == -1)
 		return (2);
 	if (path_return == -2)
-	{
 		exec->bad_command = 1;
-	//	write(2, "Command not found\n", 18);
-	}
 	return (0);
 }
 
@@ -92,10 +106,10 @@ int	cmd_path(char *cmd, t_hashmap *env_variables, char **ret)
 	}
 	env_path = env_variables->get(env_variables, "PATH");
 	if (!env_path)
-		return (-1);
+		return (-2); //was -1
 	paths = ft_split(env_path, ':');
 	if (paths == NULL)
-		return ( -1);
+		return (-1);
 	find_ret = find_path(cmd, paths, ret);
 	if (find_ret == -1)
 		return (free_and_ret(paths, -1));

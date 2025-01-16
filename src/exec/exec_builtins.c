@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 14:43:03 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 15:22:21 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:08:38 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,18 @@ int	ft_arr_len(char **arr)
 	return (i);
 }
 
+int	handle_cd(t_executor *exec, char **argv)
+{
+	extern int	g_exit_code;
+
+	g_exit_code = ft_cd(exec->env_variables, ft_arr_len(argv), argv);
+	if (g_exit_code == 1)
+		printf("ft_cd: no such file or directory %s\n", argv[1]);
+	else if (g_exit_code == ENOMEM)
+		return (printf("ft_cd: not enough memory\n"), ENOMEM);
+	return (0);
+}
+
 int	route_builtin(t_executor *exec, char **argv)
 {
 	char	*arg;
@@ -46,7 +58,7 @@ int	route_builtin(t_executor *exec, char **argv)
 	arg = exec->exec_args.next->arg;
 	//printf("routing builtin: '%s' param: '%s'\n", arg, argv[1]);fflush(stdout);
 	if (!ft_strcmp(arg, "cd")) // THERE IS MORE TO IT IN THE MAIN(), CHECK OUT
-		return (ft_cd(exec->env_variables, ft_arr_len(argv), argv));
+		return (handle_cd(exec, argv));
 	else if (!ft_strcmp(arg, "echo"))
 		return (ft_echo(ft_arr_len(argv), argv));
 	else if (!ft_strcmp(arg, "env"))	
