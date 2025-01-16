@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 11:37:53 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 12:21:42 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:48:16 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int	look_for_builtin(t_executor *exec_head)
 	char	**argv;
 	int	ret;
 
+	ret = -1;
 	if (exec_head->next || !is_special_builtin(exec_head))
 		return (0);
 	argv = list_to_arr_dup(exec_head->exec_args.next);
@@ -118,6 +119,7 @@ int	look_for_builtin(t_executor *exec_head)
 	else if (!ft_strcmp(exec_head->exec_args.next->arg, "unset"))
 		ret = ft_unset(exec_head->env_variables, ft_arr_len(argv), argv);
 	free_nt_arr(argv);
+	ret++;
 	return (ret);
 }
 
@@ -126,11 +128,15 @@ int	start_pipes(t_executor **exec_head)
 	t_executor	*current;
 	int		cmd_init_ret;
 	int		hd_ret;
+	int		builtin_ret;
 
 	signal(SIGINT, ignore_signal);
 	signal(SIGKILL, ignore_signal);
-	if (look_for_builtin(*exec_head))
-		return (0);
+	builtin_ret = look_for_builtin(*exec_head);
+	if (builtin_ret == 1)
+		return (0); //found builtin
+	if (builtin_ret == 2)
+		return (1); //malloc error somewhere
 	hd_ret = init_heredocs(*exec_head);
 	if (hd_ret == 1)
 		return (1);
