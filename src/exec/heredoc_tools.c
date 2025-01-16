@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 13:30:16 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 13:32:53 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:41:11 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	pop_hd_operator(t_elist **to_del, t_elist **node)
 	free_list_node(list_pop(*to_del));
 }
 
-void	handle_interupt(int signum)
+void	hd_handle_interupt(int signum)
 {
 	if (signum == SIGINT || signum == 130)
 	{

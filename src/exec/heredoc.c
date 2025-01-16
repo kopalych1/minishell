@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 13:31:55 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:41:29 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ static void	heredoc_routine(int fd, char *eof, t_hashmap *env)
 	char	**arr;
 	int	ret;
 
-	signal(SIGINT, handle_interupt);
-	signal(SIGQUIT, handle_interupt);
+	signal(SIGINT, hd_handle_interupt);
+	signal(SIGQUIT, hd_handle_interupt);
 	ret = 0;
 	while (1 && !ret)
 	{
@@ -101,7 +101,7 @@ static void	heredoc_routine(int fd, char *eof, t_hashmap *env)
 			exit(1);
 		line = readline(">");
 		if (!line)
-			handle_interupt(130);
+			hd_handle_interupt(130);
 		if (!ft_strcmp(line, eof))
 			break;
 		arr[0] = ft_strjoin(line, "\n");

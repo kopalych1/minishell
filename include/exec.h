@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 13:38:03 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:41:40 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	heredoc(int fd, char *eof, t_hashmap *env);
 //#===#		heredoc_tools.c		#===#//
 
 void	pop_hd_operator(t_elist **to_del, t_elist **node);
-void	handle_interupt(int signum);
+void	hd_handle_interupt(int signum);
 
 //#===#		exec_builtins.c		#===#//
 
