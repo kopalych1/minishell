@@ -6,7 +6,7 @@
 #    By: akostian <akostian@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/19 13:20:29 by akostian          #+#    #+#              #
-#    Updated: 2025/01/15 14:43:23 by vcaratti         ###   ########.fr        #
+#    Updated: 2025/01/16 13:36:52 by vcaratti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,8 @@ SRCS					= main.c \
 						  hm_free.c hm_get.c hm_set.c hm_init.c hm_delete.c hm_key_exists.c hm_sort_keys.c hm_to_array.c\
 						  ft_cd.c ft_echo.c ft_pwd.c ft_env.c ft_unset.c ft_export.c \
 						  free_arr.c \
-						  cmd_path.c exec_free.c exec_init.c exec_io.c exec_tools.c \
-						  list_tools.c heredoc.c exec_builtins.c executor.c \
+						  cmd_path.c exec_free.c exec_init.c exec_init_tools.c exec_io.c exec_tools.c \
+						  list_tools.c list_convert.c heredoc.c heredoc_tools.c exec_builtins.c executor.c \
 						  get_next_line.c get_next_line_utils.c
 
 INC_DIR					= include

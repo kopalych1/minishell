@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:46:02 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 11:42:12 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:13:05 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,8 @@ int	init_cmd_args(t_executor *exec_head)
 	return (0);
 }
 
-int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_hashmap *env_variables)
+static void	nullset_exec(t_executor **ret)
 {
-	*ret = malloc(sizeof(t_executor));
-	if (!(*ret))
-		return (1);
-	(*ret)->prev = p;
-	(*ret)->next = n;
-	(*ret)->envp = hm_to_array(env_variables);
-	(void)envp;
-	if (!(*ret)->envp)
-		return (free(*ret), 1);
-	(*ret)->env_variables = env_variables;
 	(*ret)->infiles.next = 0;
 	(*ret)->infiles.prev = 0;
 	(*ret)->infiles.arg = 0;
@@ -86,32 +76,22 @@ int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_h
 	(*ret)->fds[1] = -1;
 	(*ret)->heredoc_p[0] = -1;
 	(*ret)->heredoc_p[1] = -1;
-	(*ret)->bad_command = 0;
-	return (0);
+	(*ret)->bad_command = 0;	
 }
 
-t_elist *list_pop(t_elist *node)
+int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_hashmap *env_variables)
 {
-	if (!node->prev)
-		return (NULL);
-	if (node->prev)
-		node->prev->next = node->next;
-	if (node->next)
-		node->next->prev = node->prev;
-	return (node);
-}
-
-int	pop_append(t_elist *args_head, t_elist *to_append)
-{
-	t_elist	*current;
-
-	current = args_head->next;
-	if (!current->next)
-		return (1);//no infile/outfile specified
-	if (has_special_c(current->next->arg))
+	*ret = malloc(sizeof(t_executor));
+	if (!(*ret))
 		return (1);
-	free_list_node(list_pop(args_head->next));
-	list_append(to_append, list_pop(args_head->next));
+	(*ret)->prev = p;
+	(*ret)->next = n;
+	(*ret)->envp = hm_to_array(env_variables);
+	(void)envp;
+	if (!(*ret)->envp)
+		return (free(*ret), 1);
+	(*ret)->env_variables = env_variables;
+	nullset_exec(ret);
 	return (0);
 }
 
@@ -140,23 +120,5 @@ int	fetch_redirect(t_elist *args_head, t_executor *current_exec)
 		list_append(&(current_exec->outfiles), temp);
 	}
 	free_list_node(list_pop(args_head->next));
-	return (0);
-}
-
-int	list_init(t_elist *args_head, char **args)
-{
-	int	i;
-
-	args_head->arg = 0;	
-	args_head->next = 0;
-	args_head->prev = 0;
-	i = 0;
-	while (args[i])
-	{
-		if (list_append_arg(args_head, args[i++]))
-			return (1);//
-	}
-	if (i == 0)
-		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 14:42:48 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:38:03 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,14 @@ int	cmd_path(char *cmd, t_hashmap *env_variables, char **ret);
 //#===#		list_tools.c	#===#//
 
 int	list_len(t_elist *head);
-char	**list_to_arr(t_elist *head);
-char	**list_to_arr_dup(t_elist *head);
-t_elist	*list_pop(t_elist *elem);
+void	rev_free(char **arr, int i);
 int	list_append_arg(t_elist *lst, char *arg);
 void	list_append(t_elist *lst, t_elist *node);
+
+//#===#		list_convert.c	#===#//
+
+char	**list_to_arr(t_elist *head);
+char	**list_to_arr_dup(t_elist *head);
 
 //#===#		exec_init.c		#===#//
 
@@ -94,7 +97,12 @@ int	init_children_pipes(t_executor *exec_head);
 int	init_cmd_args(t_executor *exec_head);
 int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_hashmap *env_variables);
 int	fetch_redirect(t_elist *current, t_executor *current_exec);
+
+//#===#		exec_init_tools.c	#===#//
+
 int	list_init(t_elist *args_head, char **args);
+t_elist	*list_pop(t_elist *node);
+int	pop_append(t_elist *arg_head, t_elist *to_append);
 
 //#===#		exec_tools.c	#===#//
 
@@ -113,6 +121,11 @@ void	close_all_except(t_executor *exec);
 int	heredoc_check(t_elist **node, t_executor *exec);
 int	init_heredocs(t_executor *exec_head);
 int	heredoc(int fd, char *eof, t_hashmap *env);
+
+//#===#		heredoc_tools.c		#===#//
+
+void	pop_hd_operator(t_elist **to_del, t_elist **node);
+void	handle_interupt(int signum);
 
 //#===#		exec_builtins.c		#===#//
 

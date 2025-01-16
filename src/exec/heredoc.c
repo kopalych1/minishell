@@ -6,7 +6,7 @@
 /*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 13:49:27 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:31:55 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,7 @@ int	heredoc_check(t_elist **node, t_executor *exec)
 			return (hd_ret);
 	}
 	if ((*node)->mode == 'h')
-	{
-		to_del = (*node);
-		(*node) = to_del->next;
-		free_list_node(list_pop(to_del));
-	}
+		pop_hd_operator(&to_del, node);
 	return (0);
 }
 
@@ -67,20 +63,26 @@ int	init_heredocs(t_executor *exec_head)
 	return (0);
 }
 
-static void	handle_interupt(int signum)
+static int	route_hd_line(char **arr, t_hashmap *env, int fd)
 {
-	if (signum == SIGINT || signum == 130)
+	int	ret;
+
+	ret = 0;
+	if (!arr[0])
 	{
-		//ft_printf("\n");
-		//rl_replace_line("", 0);
-		//rl_on_new_line();
-		//rl_redisplay();
-		//printf("wut?");fflush(stdout);
-		if (signum == SIGINT)
-			exit(1);
-		printf("minishell: warning: here-document delimited by end-of-file\n");
-		exit(130); // return code, needs to be in global?
+		free(arr);
+		exit(1);
 	}
+	if (fd != -1)
+	{
+		if (post_process_argv(&arr, 1, env) == -1)
+			ret = 1;
+		else if (write(fd, arr[0], ft_strlen(arr[0])) == -1)
+			ret = 1;
+	}
+	free(arr[0]);
+	free(arr);
+	return (ret);
 }
 
 static void	heredoc_routine(int fd, char *eof, t_hashmap *env)
@@ -91,7 +93,8 @@ static void	heredoc_routine(int fd, char *eof, t_hashmap *env)
 
 	signal(SIGINT, handle_interupt);
 	signal(SIGQUIT, handle_interupt);
-	while (1)
+	ret = 0;
+	while (1 && !ret)
 	{
 		arr = malloc(sizeof(char *));
 		if (!arr)
@@ -103,21 +106,7 @@ static void	heredoc_routine(int fd, char *eof, t_hashmap *env)
 			break;
 		arr[0] = ft_strjoin(line, "\n");
 		free(line);
-		if (!arr[0])
-		{
-			free(arr);
-			exit(1);
-		}
-		ret = 0;
-		if (fd != -1)
-		{	
-			if (post_process_argv(&arr, 1, env) == -1)
-				ret = 1;
-			else if (write(fd, arr[0], ft_strlen(arr[0])) == -1)
-				ret = 1;
-		}
-		free(arr[0]);
-		free(arr);
+		ret = route_hd_line(arr, env, fd);
 	}
 	close(fd);
 	exit(ret);
