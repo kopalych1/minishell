@@ -90,6 +90,7 @@ char	**args_parse(char *str, t_hashmap *env_variables)
 {
 	const ssize_t	argc = calculate_argc(str);
 	char			**ret;
+	char			*extra_line;
 
 	if (argc == -1)
 		return (NULL);
@@ -98,6 +99,16 @@ char	**args_parse(char *str, t_hashmap *env_variables)
 		return (NULL);
 	if (fill_argv(&ret, argc, str) == -1)
 		return (NULL);
+	if (ret[argc - 1][0] == '|')
+	{
+		extra_line = pipe_readline(env_variables);
+		while (!extra_line)
+			extra_line = pipe_readline(env_variables);
+		ret = ft_realloc(ret, (argc + 1) * sizeof(char *),
+				(argc + 2) * sizeof(char *));
+		ret[argc] = extra_line;
+		ret[argc + 1] = 0;
+	}
 	if (post_process_argv(&ret, argc, env_variables) == -1)
 		return (NULL);
 	return (ret);
