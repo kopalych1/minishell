@@ -18,7 +18,7 @@ static void	handle_interupt(int signum)
 	if (signum == SIGINT || signum == 130)
 	{
 		if (signum == SIGINT)
-			exit(1);
+			exit(3);
 		printf("minishell: syntax error: unexpected end of file\n");
 		exit(130); // return code, needs to be in global?
 	}
@@ -79,11 +79,11 @@ int	check_line(char *line, char ***arr, int *stop)
 	if (starts_with_pipe(line))
 	{
 		ft_printf("minishell: syntax error near unexpected token '|'\n");
-		return (free(line), free_nt_arr(*arr), 1);
+		return (free(line), free_nt_arr(*arr), exit(2), 2);
 	}
 	new_arr = (char **)malloc(sizeof(char *) * (ft_arr_len(*arr) + 2));
 	if (!new_arr)
-		return (free(line), free_nt_arr(*arr), 1);
+		return (free(line), free_nt_arr(*arr), exit(1), 1);
 	i = -1;
 	while (++i < ft_arr_len(*arr))
 		new_arr[i] = (*arr)[i];
@@ -110,12 +110,8 @@ static void	pipe_readline_routine(int fd, t_hashmap *env)
 	{
 		line = readline(">");
 		if (!line)
-		{
-			free_nt_arr(arr);
-			handle_interupt(130);
-		}
-		if (check_line(line, &arr, &stop))
-			exit(1);
+			return (free_nt_arr(arr), handle_interupt(130));
+		check_line(line, &arr, &stop);
 	}
 	if (post_process_argv(&arr, ft_arr_len(arr), env) == -1)
 		free_close_exit(arr, fd, 1);
@@ -150,9 +146,14 @@ char	*pipe_readline(t_hashmap *env)
 	waitpid(child, &g_exit_code, WCONTINUED);
 	close(pipes[1]);
 	line = get_next_line(pipes[0]);
+	printf("exit_code: %d\n", g_exit_code);
 	if (g_exit_code)
 		line = NULL;
-	if (g_exit_code == 256) // ctrl-C
+	if (g_exit_code == 256) //malloc/write error
+		g_exit_code = 1;
+	if (g_exit_code == 512)//bad token
+		g_exit_code = 2;
+	if (g_exit_code == 768)//bad token
 		g_exit_code = 130;
 	if (g_exit_code == 33280) // ctrl-D
 		g_exit_code = 0;
