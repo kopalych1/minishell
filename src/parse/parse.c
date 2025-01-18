@@ -124,8 +124,10 @@ char	**args_parse(char *str, t_hashmap *env_variables)
 	if (ret[argc - 1][0] == '|')
 	{
 		extra_line = pipe_readline(env_variables);
-		while (!extra_line)
-			extra_line = pipe_readline(env_variables);
+		if (extra_line == NULL)
+			return (NULL); //NOT GOOD, need to implement scenario where minishell doesnt terminate, and the execution doesnt execute
+		//while (!extra_line)
+		//	extra_line = pipe_readline(env_variables);
 		ret = ft_realloc(ret, (argc + 1) * sizeof(char *),
 				(argc + 2) * sizeof(char *));
 		ret[argc] = extra_line;

@@ -33,6 +33,8 @@ void	free_nt_arr(char **arr)
 	int	i;
 
 	i = 0;
+	if (!arr)
+		return ;
 	while (arr[i] != 0)
 	{
 		free(arr[i]);

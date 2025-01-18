@@ -26,36 +26,110 @@ static void	handle_interupt(int signum)
 
 static void	free_close_exit(char **arr, int fd, int ret)
 {
-	free(arr[0]);
+	int	i;
+
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
 	free(arr);
 	close(fd);
 	exit(ret);
 }
 
+int	starts_with_pipe(char  *str)
+{
+	size_t	i;
+
+	i = -1;
+	while (++i < ft_strlen(str))
+	{
+		if (ft_isspace(str[i]))
+			continue;
+		else if(str[i] == '|')
+			return (1);
+		else
+			return (0);
+	}
+	return (0);
+}
+
+int	ends_with_pipe(char *str)
+{
+	int	i;
+
+	i = ft_strlen(str);
+	while (--i)
+	{
+		if (ft_isspace(str[i]))
+			continue;
+		else if (str[i] == '|')
+			return (1);
+		else
+			return (0);
+	}
+	return (0);
+}
+
+int	check_line(char *line, char ***arr, int *stop)
+{
+	char	**new_arr;
+	int	i;
+
+	*stop = 1;
+	if (starts_with_pipe(line))
+	{
+		ft_printf("minishell: syntax error near unexpected token '|'\n");
+		return (free(line), free_nt_arr(*arr), 1);
+	}
+	new_arr = (char **)malloc(sizeof(char *) * (ft_arr_len(*arr) + 2));
+	if (!new_arr)
+		return (free(line), free_nt_arr(*arr), 1);
+	i = -1;
+	while (++i < ft_arr_len(*arr))
+		new_arr[i] = (*arr)[i];
+	new_arr[i++] = line;
+	new_arr[i] = 0;
+	free(*arr);
+	*arr = new_arr;
+	if (ends_with_pipe(line))
+		*stop = 0;
+	return (0);
+}
+
 static void	pipe_readline_routine(int fd, t_hashmap *env)
 {
 	char	**arr;
-	int	ret;
+	int	stop;
+	char	*line;
 
 	signal(SIGINT, handle_interupt);
 	signal(SIGQUIT, handle_interupt);
-	arr = malloc(sizeof(char *));
-	if (!arr)
-		exit(1);
-	arr[0] = readline(">");
-	if (!arr[0])
-		handle_interupt(130);
-	if (!arr[0])
+	arr = NULL;
+	stop = 0;
+	while (!stop)
 	{
-		free(arr);
-		exit(1);
+		line = readline(">");
+		if (!line)
+		{
+			free_nt_arr(arr);
+			handle_interupt(130);
+		}
+		if (check_line(line, &arr, &stop))
+			exit(1);
 	}
-	ret = 0;
-	if (post_process_argv(&arr, 1, env) == -1)
-		ret = 1;
-	else if (write(fd, arr[0], ft_strlen(arr[0])) == -1)
-		ret = 1;
-	free_close_exit(arr, fd, ret);
+	if (post_process_argv(&arr, ft_arr_len(arr), env) == -1)
+		free_close_exit(arr, fd, 1);
+	else
+	{
+		stop = 0;
+		while (arr[stop])
+		{
+			if (write(fd, arr[stop], ft_strlen(arr[stop])) == -1)
+				free_close_exit(arr, fd, 1);
+			stop++;
+		}
+	}
+	free_close_exit(arr, fd, 0);
 }
 
 char	*pipe_readline(t_hashmap *env)
