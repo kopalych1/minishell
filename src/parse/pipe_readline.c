@@ -111,6 +111,13 @@ static void	pipe_readline_routine(int fd, t_hashmap *env)
 		line = readline(">");
 		if (!line)
 			return (free_nt_arr(arr), handle_interupt(130));
+		while (line[0] == '\0')
+		{
+			free(line);
+			line = readline(">");
+			if (!line)
+				return (free_nt_arr(arr), handle_interupt(130));
+		}
 		check_line(line, &arr, &stop);
 	}
 	if (post_process_argv(&arr, ft_arr_len(arr), env) == -1)
@@ -146,14 +153,15 @@ char	*pipe_readline(t_hashmap *env)
 	waitpid(child, &g_exit_code, WCONTINUED);
 	close(pipes[1]);
 	line = get_next_line(pipes[0]);
-	printf("exit_code: %d\n", g_exit_code);
+	if (g_exit_code)
+		free(line);
 	if (g_exit_code)
 		line = NULL;
 	if (g_exit_code == 256) //malloc/write error
 		g_exit_code = 1;
 	if (g_exit_code == 512)//bad token
 		g_exit_code = 2;
-	if (g_exit_code == 768)//bad token
+	if (g_exit_code == 768)// ctrl-C
 		g_exit_code = 130;
 	if (g_exit_code == 33280) // ctrl-D
 		g_exit_code = 0;
