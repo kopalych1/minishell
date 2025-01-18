@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 04:04:01 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/13 14:26:57 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/18 12:21:39 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,22 @@ static int	fill_argv(char ***argv, const size_t argc, char *str)
 	return (0);
 }
 
+static size_t	exit_code_length(void)
+{
+	extern int	g_exit_code;
+	int			n;
+	size_t		ret;
+
+	n = g_exit_code;
+	ret = 0;
+	while (n)
+	{
+		ret++;
+		n /= 10;
+	}
+	return (ret);
+}
+
 // Returns a length of value of every var combined in argument
 static ssize_t	calc_vars_size(char *arg, t_hashmap *env_variables)
 {
@@ -44,6 +60,12 @@ static ssize_t	calc_vars_size(char *arg, t_hashmap *env_variables)
 	{
 		if (*arg == '$')
 		{
+			if (*(arg + 1) && (*(arg + 1) == '?'))
+			{
+				ret += exit_code_length();
+				arg++;
+				continue ;
+			}
 			var = ft_substr(arg, 1, get_var_length(arg));
 			if (!var)
 				return (-1);

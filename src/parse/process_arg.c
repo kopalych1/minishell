@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 08:48:55 by akostian          #+#    #+#             */
-/*   Updated: 2024/10/23 16:58:03 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/18 12:10:27 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,21 @@ static int	treat_var(
 			t_hashmap *env_variables
 )
 {
-	ssize_t	written_length;
+	ssize_t		written_length;
+	extern int	g_exit_code;
+	char		*exit_code_str;
+	int			j;
 
+	if (ft_strchr("\'\"", *(*old_arg + 1)))
+		return ((*ret)[(*i)++] = '$', *old_arg = *old_arg + 1, 0);
+	if (*(*old_arg + 1) && *(*old_arg + 1) == '?')
+	{
+		exit_code_str = ft_itoa(g_exit_code);
+		j = 0;
+		while (exit_code_str[j])
+			(*ret)[(*i)++] = exit_code_str[j++];
+		return (*old_arg = *old_arg + j, free(exit_code_str), 0);
+	}
 	written_length = write_var(ret, i, *old_arg, env_variables);
 	if (written_length == -1)
 		return (-1);

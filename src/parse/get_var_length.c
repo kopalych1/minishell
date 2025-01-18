@@ -16,7 +16,8 @@ size_t	get_var_length(char *str)
 {
 	size_t	length;
 
-	str++;
+	if (*str++ == '?')
+		return (1);
 	length = 1;
 	while (*str && (ft_isalnum(*str) || *str == '_'))
 	{
