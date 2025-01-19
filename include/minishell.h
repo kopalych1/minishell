@@ -59,6 +59,10 @@ int			post_process_argv(
 					t_hashmap *env_variables
 );
 char			*pipe_readline(t_hashmap *env);
+void	handle_interupt(int signum);
+void	free_close_exit(char **arr, int fd, int ret);
+int	starts_with_pipe(char  *str);
+int	ends_with_pipe(char *str);
 
 /*  */
 

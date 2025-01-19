@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_readline.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
 /*   Updated: 2025/01/15 15:15:06 by vcaratti         ###   ########.fr       */
@@ -12,63 +12,6 @@
 
 #include "../../include/minishell.h"
 #include "../../include/exec.h"
-
-static void	handle_interupt(int signum)
-{
-	if (signum == SIGINT || signum == 130)
-	{
-		if (signum == SIGINT)
-			exit(3);
-		printf("minishell: syntax error: unexpected end of file\n");
-		exit(130); // return code, needs to be in global?
-	}
-}
-
-static void	free_close_exit(char **arr, int fd, int ret)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-		free(arr[i++]);
-	free(arr);
-	close(fd);
-	exit(ret);
-}
-
-int	starts_with_pipe(char  *str)
-{
-	size_t	i;
-
-	i = -1;
-	while (++i < ft_strlen(str))
-	{
-		if (ft_isspace(str[i]))
-			continue;
-		else if(str[i] == '|')
-			return (1);
-		else
-			return (0);
-	}
-	return (0);
-}
-
-int	ends_with_pipe(char *str)
-{
-	int	i;
-
-	i = ft_strlen(str);
-	while (--i)
-	{
-		if (ft_isspace(str[i]))
-			continue;
-		else if (str[i] == '|')
-			return (1);
-		else
-			return (0);
-	}
-	return (0);
-}
 
 int	check_line(char *line, char ***arr, int *stop)
 {
@@ -96,6 +39,28 @@ int	check_line(char *line, char ***arr, int *stop)
 	return (0);
 }
 
+static int	get_new_line(char **line, char ***arr)
+{
+	int	stop;
+
+	stop = 0;
+	while (!stop)
+	{
+		*line = readline("pipe>");
+		if (!(*line))
+			return (1);
+		while ((*line)[0] == '\0')
+		{
+			free(*line);
+			*line = readline("pipe>");
+			if (!(*line))
+				return (1);
+		}
+		check_line(*line, arr, &stop);
+	}
+	return (0);
+}
+
 static void	pipe_readline_routine(int fd, t_hashmap *env)
 {
 	char	**arr;
@@ -104,22 +69,9 @@ static void	pipe_readline_routine(int fd, t_hashmap *env)
 
 	signal(SIGINT, handle_interupt);
 	signal(SIGQUIT, handle_interupt);
-	arr = NULL;
-	stop = 0;
-	while (!stop)
-	{
-		line = readline(">");
-		if (!line)
-			return (free_nt_arr(arr), handle_interupt(130));
-		while (line[0] == '\0')
-		{
-			free(line);
-			line = readline(">");
-			if (!line)
-				return (free_nt_arr(arr), handle_interupt(130));
-		}
-		check_line(line, &arr, &stop);
-	}
+	arr = NULL;	
+	if (get_new_line(&line, &arr))
+		return (free_nt_arr(arr), handle_interupt(130));
 	if (post_process_argv(&arr, ft_arr_len(arr), env) == -1)
 		free_close_exit(arr, fd, 1);
 	else
@@ -133,6 +85,24 @@ static void	pipe_readline_routine(int fd, t_hashmap *env)
 		}
 	}
 	free_close_exit(arr, fd, 0);
+}
+
+//256:	malloc/write error
+//512:	bad token
+//768:	ctrl-C
+//33280:ctrl-D 
+static void	set_exit_code()
+{
+	extern int	g_exit_code;
+	
+	if (g_exit_code == 256)
+		g_exit_code = 1;
+	if (g_exit_code == 512)
+		g_exit_code = 2;
+	if (g_exit_code == 768)
+		g_exit_code = 130;
+	if (g_exit_code == 33280)
+		g_exit_code = 0;
 }
 
 char	*pipe_readline(t_hashmap *env)
@@ -157,13 +127,5 @@ char	*pipe_readline(t_hashmap *env)
 		free(line);
 	if (g_exit_code)
 		line = NULL;
-	if (g_exit_code == 256) //malloc/write error
-		g_exit_code = 1;
-	if (g_exit_code == 512)//bad token
-		g_exit_code = 2;
-	if (g_exit_code == 768)// ctrl-C
-		g_exit_code = 130;
-	if (g_exit_code == 33280) // ctrl-D
-		g_exit_code = 0;
-	return (line);
+	return (set_exit_code(), line);
 }
