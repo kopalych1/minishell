@@ -79,7 +79,7 @@ static void	nullset_exec(t_executor **ret)
 	(*ret)->bad_command = 0;	
 }
 
-int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_hashmap *env_variables)
+int	create_exec(t_executor **ret, t_executor *p, t_executor *n, t_hashmap *env_variables)
 {
 	*ret = malloc(sizeof(t_executor));
 	if (!(*ret))
@@ -87,7 +87,6 @@ int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_h
 	(*ret)->prev = p;
 	(*ret)->next = n;
 	(*ret)->envp = hm_to_array(env_variables);
-	(void)envp;
 	if (!(*ret)->envp)
 		return (free(*ret), 1);
 	(*ret)->env_variables = env_variables;

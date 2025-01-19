@@ -51,3 +51,7 @@ int	get_nb_exec(t_executor *exec_head)
 	return (i);
 }
 
+void	ignore_signal(int signum)
+{
+	(void)signum;
+}

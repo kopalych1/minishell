@@ -43,12 +43,12 @@ void	free_nt_arr(char **arr)
 	free(arr);
 }
 
-void	free_all(t_executor *head)
+void	free_all(t_executor **head)
 {
 	t_executor	*current;
 	t_executor	*next;
 
-	current = head;
+	current = *head;
 	while (current)
 	{
 		next = current->next;
@@ -62,8 +62,8 @@ void	free_all(t_executor *head)
 			free_nt_arr(current->cmd.args);
 		if (current->cmd.path)
 			free(current->cmd.path);
-		free_nt_arr(current->envp);
 		free(current);
+		*head = NULL;
 		current = next;
 	}
 }

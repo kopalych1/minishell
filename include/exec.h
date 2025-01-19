@@ -45,7 +45,6 @@ typedef	struct s_executor
 	t_elist			outfiles;
 	t_elist			exec_args;
 	t_cmd			cmd;
-	char			**envp;
 	t_hashmap		*env_variables;
 	int			fid;
 	int			pipes[2];
@@ -64,10 +63,14 @@ int	exec_routine(t_executor *exec);
 int	start_pipes(t_executor **exec_head);
 int	executor(char **args, char **envp, t_hashmap *env_variables, int *exec_ret);
 
+//#===#		exec_tokenise.c		#===#//
+
+int	tokenise(char **args, t_executor **exec_head, t_hashmap *env_variables);
+
 //#===#		exec_free.c		#===#//
 
 int		free_and_ret(char **to_free, int ret);
-void	free_all(t_executor *head);
+void	free_all(t_executor **head);
 void	free_nt_arr(char **arr);
 void	free_list(t_elist *head);
 void	free_list_node(t_elist *list);
@@ -95,7 +98,7 @@ char	**list_to_arr_dup(t_elist *head);
 
 int	init_children_pipes(t_executor *exec_head);
 int	init_cmd_args(t_executor *exec_head);
-int	create_exec(t_executor **ret, t_executor *p, t_executor *n, char **envp, t_hashmap *env_variables);
+int	create_exec(t_executor **ret, t_executor *p, t_executor *n, t_hashmap *env_variables);
 int	fetch_redirect(t_elist *current, t_executor *current_exec);
 
 //#===#		exec_init_tools.c	#===#//
@@ -104,11 +107,19 @@ int	list_init(t_elist *args_head, char **args);
 t_elist	*list_pop(t_elist *node);
 int	pop_append(t_elist *arg_head, t_elist *to_append);
 
+//#===#		exec_child.c	#===#//
+
+void	close_all(t_executor *exec);
+int	pipe_dup(int pipe_fd, int fd);
+int	handle_dups(t_executor *exec);
+int	exec_routine(t_executor *exec);
+
 //#===#		exec_tools.c	#===#//
 
 int	has_special_c(char *str);
 char	*trim_redirect(char *str);
 int	get_nb_exec(t_executor *exec_head);
+void	ignore_signal(int signum);
 
 //#===#		exec_io.c		#===#//
 
@@ -133,5 +144,11 @@ int	is_builtin(t_executor *exec);
 int	ft_arr_len(char **arr);
 int	route_builtin(t_executor *exec, char **argv);
 int	builtin_routine(t_executor *exec);
+
+//#===#		exec_builtins_special.c	#===#//
+
+int	is_special_builtin(t_executor *exec);
+int	handle_cd(t_executor *exec, char **argv);
+int	look_for_builtin(t_executor *exec_head);
 
 #endif
