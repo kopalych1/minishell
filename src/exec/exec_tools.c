@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:49:56 by vcaratti          #+#    #+#             */
-/*   Updated: 2024/12/18 15:47:48 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:18:59 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*trim_redirect(char *str)
 	if (str[0] != '<' && str[0] != '>')
 		return (NULL);
 	ret = ft_strdup(str + 1);
-	return (/*free(str), */ret);
+	return (ret);
 }
 
 int	get_nb_exec(t_executor *exec_head)

@@ -6,17 +6,16 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 11:37:53 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/20 11:33:48 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:24:06 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/exec.h"
 
-
 int	load_prepipes(t_executor **exec_head)
 {
-	int		ret;
-	
+	int	ret;
+
 	ret = look_for_builtin(*exec_head);
 	if (ret == 1)
 		return (1);
@@ -39,8 +38,8 @@ int	load_prepipes(t_executor **exec_head)
 
 int	start_pipes(t_executor **exec_head)
 {
+	int			ret;
 	t_executor	*current;
-	int		ret;
 
 	signal(SIGINT, ignore_signal);
 	signal(SIGKILL, ignore_signal);
@@ -57,7 +56,7 @@ int	start_pipes(t_executor **exec_head)
 		{
 			if (exec_routine(current))
 				exit(1);
-		}	
+		}
 		current = current->next;
 	}
 	return (0);
@@ -78,10 +77,11 @@ void	close_exec_fds(t_executor *current)
 	if (current->heredoc_p[1] > -1)
 		close(current->heredoc_p[1]);
 }
+
 int	close_wait(t_executor *exec_head)
 {
 	t_executor	*current;
-	int		ret;
+	int			ret;
 
 	current = exec_head;
 	ret = 0;
@@ -93,7 +93,7 @@ int	close_wait(t_executor *exec_head)
 	current = exec_head;
 	while (current)
 	{
-		waitpid(current->fid, &ret, WCONTINUED);//return values
+		waitpid(current->fid, &ret, WCONTINUED);
 		current = current->next;
 	}
 	return (ret);
@@ -102,23 +102,23 @@ int	close_wait(t_executor *exec_head)
 int	executor(char **args, char **envp, t_hashmap *env_variables, int *exec_ret)
 {
 	t_executor	*exec_head;
-	int		tokenise_ret;
+	int			tokenise_ret;
 
-	(void)envp;
+	(void)envp;//
 	tokenise_ret = tokenise(args, &exec_head, env_variables);
 	if (tokenise_ret)
 		return (tokenise_ret - 1);
 	if (start_pipes(&exec_head))
-		return (free_all(&exec_head), 1);//free
+		return (free_all(&exec_head), 1);
 	*exec_ret = close_wait(exec_head);
 	if (is_builtin(exec_head) && !exec_head->next)
 	{
 		if (!ft_strcmp(exec_head->exec_args.next->arg, "exit"))
 		{
 			free_all(&exec_head);
-			exit(0);//?
+			exit(0);
 		}
 	}
 	free_all(&exec_head);
-	return (0);	
+	return (0);
 }

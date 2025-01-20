@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:43:57 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 13:35:41 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:28:28 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	list_len(t_elist *head)
 {
-	t_elist *current;
-	int	i;
+	t_elist	*current;
+	int		i;
 
 	current = head;
 	i = 0;
@@ -26,7 +26,6 @@ int	list_len(t_elist *head)
 	}
 	return (i);
 }
-
 
 void	rev_free(char **arr, int i)
 {
@@ -43,11 +42,11 @@ int	list_append_arg(t_elist *lst, char *arg)
 		current = current->next;
 	current->next = (t_elist *)malloc(sizeof(t_elist));
 	if (!current->next)
-		return (1); // free;
+		return (1);
 	current->next->prev = current;
 	current->next->next = 0;
 	current->next->mode = 0;
-	current->next->arg = ft_strdup(arg); //if og is dynamic or static;
+	current->next->arg = ft_strdup(arg);
 	if (!current->next->arg)
 		return (1);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:46:02 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/20 11:36:19 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:27:07 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	init_children_pipes(t_executor *exec_head)
 {
-	int		last_stdout;
-	int		created_fds[2];
+	int			last_stdout;
+	int			created_fds[2];
 	t_executor	*current;
 
 	current = exec_head;
@@ -26,10 +26,10 @@ int	init_children_pipes(t_executor *exec_head)
 		{
 			current->pipes[0] = last_stdout;
 			current->pipes[1] = -1;
-			break;
-		}	
+			break ;
+		}
 		if (pipe(created_fds) == -1)
-			return (1);//free
+			return (1);
 		current->pipes[1] = created_fds[1];
 		current->pipes[0] = last_stdout;
 		last_stdout = created_fds[0];
@@ -41,15 +41,14 @@ int	init_children_pipes(t_executor *exec_head)
 int	init_cmd_args(t_executor *exec_head)
 {
 	t_executor	*current;
-	int		cmd_init_ret;
+	int			cmd_init_ret;
 
 	current = exec_head;
 	while (current)
-	{	if (!is_builtin(current) && current->exec_args.next)
+	{
+		if (!is_builtin(current) && current->exec_args.next)
 		{
 			cmd_init_ret = treat_cmd(current);
-			//if (cmd_init_ret == 3)
-			//	return (0);
 			if (cmd_init_ret)
 				return (1);
 		}
@@ -76,10 +75,11 @@ static void	nullset_exec(t_executor **ret)
 	(*ret)->fds[1] = -1;
 	(*ret)->heredoc_p[0] = -1;
 	(*ret)->heredoc_p[1] = -1;
-	(*ret)->bad_command = 0;	
+	(*ret)->bad_command = 0;
 }
 
-int	create_exec(t_executor **ret, t_executor *p, t_executor *n, t_hashmap *env_variables)
+int	create_exec(t_executor **ret, t_executor *p
+	, t_executor *n, t_hashmap *env_variables)
 {
 	*ret = malloc(sizeof(t_executor));
 	if (!(*ret))
@@ -101,7 +101,7 @@ int	fetch_redirect(t_elist *args_head, t_executor *current_exec)
 
 	mode = 0;
 	if (!args_head->next->next)
-		return (1);//nothing after redirect
+		return (1);
 	if (args_head->next->arg[0] == '<')
 	{
 		if (args_head->next->arg[1] == '<')

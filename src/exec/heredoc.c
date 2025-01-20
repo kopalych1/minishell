@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 14:41:29 by vcaratti         ###   ########.fr       */
+/*   Created: 2025/01/20 13:15:46 by vcaratti          #+#    #+#             */
+/*   Updated: 2025/01/20 13:40:26 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int	heredoc_check(t_elist **node, t_executor *exec)
 {
 	t_elist	*to_del;
-	int	hd_ret;
+	int		hd_ret;
 
 	if (!(*node)->next && (*node)->mode == 'h')
 	{
-		if (pipe((exec->heredoc_p)) ==  -1)
+		if (pipe((exec->heredoc_p)) == -1)
 			return (1);
 		hd_ret = heredoc(exec->heredoc_p[1], (*node)->arg, exec->env_variables);
 		if (hd_ret)
@@ -41,7 +41,7 @@ int	heredoc_check(t_elist **node, t_executor *exec)
 int	init_heredocs(t_executor *exec_head)
 {
 	t_elist	*current;
-	int	hd_ret;
+	int		hd_ret;
 
 	while (exec_head)
 	{
@@ -89,7 +89,7 @@ static void	heredoc_routine(int fd, char *eof, t_hashmap *env)
 {
 	char	*line;
 	char	**arr;
-	int	ret;
+	int		ret;
 
 	signal(SIGINT, hd_handle_interupt);
 	signal(SIGQUIT, hd_handle_interupt);
@@ -103,7 +103,7 @@ static void	heredoc_routine(int fd, char *eof, t_hashmap *env)
 		if (!line)
 			hd_handle_interupt(130);
 		if (!ft_strcmp(line, eof))
-			break;
+			break ;
 		arr[0] = ft_strjoin(line, "\n");
 		free(line);
 		ret = route_hd_line(arr, env, fd);
@@ -114,8 +114,9 @@ static void	heredoc_routine(int fd, char *eof, t_hashmap *env)
 
 int	heredoc(int fd, char *eof, t_hashmap *env)
 {
-	int	child;
-	int	ret;
+	int			child;
+	int			ret;
+	extern int	g_exit_code;
 
 	child = fork();
 	if (child == -1)
@@ -125,7 +126,8 @@ int	heredoc(int fd, char *eof, t_hashmap *env)
 	close(fd);
 	waitpid(child, &ret, WCONTINUED);
 	if (ret == 256)
+		g_exit_code = 2;
+	if (ret == 256)
 		return (2);
-	//RET IS FOR GLOBAL, NEED TO IMPL THIS
 	return (0);
 }

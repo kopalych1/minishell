@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:52:38 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 13:15:26 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:42:03 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	open_outfiles(t_executor *exec)
 {
 	t_elist	*current;
-	int	fd;
+	int		fd;
 
 	current = exec->outfiles.next;
 	if (!current)
@@ -41,7 +41,7 @@ int	open_outfiles(t_executor *exec)
 int	open_infiles(t_executor *exec)
 {
 	t_elist	*current;
-	int	fd;
+	int		fd;
 
 	current = exec->infiles.next;
 	if (!current)

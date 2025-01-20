@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 13:30:16 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 14:41:11 by vcaratti         ###   ########.fr       */
+/*   Created: 2025/01/20 13:15:55 by vcaratti          #+#    #+#             */
+/*   Updated: 2025/01/20 13:40:41 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ void	hd_handle_interupt(int signum)
 		if (signum == SIGINT)
 			exit(1);
 		printf("minishell: warning: here-document delimited by end-of-file\n");
-		exit(130); // return code, needs to be in global?
+		exit(130);
 	}
 }

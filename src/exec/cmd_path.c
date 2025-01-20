@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 11:51:55 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 12:22:34 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:30:40 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,13 @@ int	has_whitespace(char *str)
 
 int	treat_cmd(t_executor *exec)
 {
-	int	path_return;
+	int		path_return;
 	t_cmd	*ret;
-	
+
+	if (!exec)
+		return (1);
+	if (!exec->exec_args.next)
+		return (1);
 	ret = &(exec->cmd);
 	if (has_whitespace(exec->exec_args.next->arg))
 	{
@@ -71,7 +75,7 @@ char	*join_path_cmd(char *path, char *cmd)
 int	find_path(char *cmd, char **paths, char **ret)
 {
 	char	*test_path;
-	int	i;
+	int		i;
 
 	i = 0;
 	*ret = NULL;
@@ -97,7 +101,7 @@ int	cmd_path(char *cmd, t_hashmap *env_variables, char **ret)
 {
 	char	*env_path;
 	char	**paths;
-	int	find_ret;
+	int		find_ret;
 
 	if (access(cmd, X_OK) == 0)
 	{
@@ -106,7 +110,7 @@ int	cmd_path(char *cmd, t_hashmap *env_variables, char **ret)
 	}
 	env_path = env_variables->get(env_variables, "PATH");
 	if (!env_path)
-		return (-2); //was -1
+		return (-2);
 	paths = ft_split(env_path, ':');
 	if (paths == NULL)
 		return (-1);

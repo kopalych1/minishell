@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_convert.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vcaratti <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 13:35:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 13:37:06 by vcaratti         ###   ########.fr       */
+/*   Created: 2025/01/20 13:16:02 by vcaratti          #+#    #+#             */
+/*   Updated: 2025/01/20 13:41:49 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	**list_to_arr(t_elist *head)
 {
-	char		**ret;
+	char	**ret;
 	int		i;
 	int		len;
 	t_elist	*current;
@@ -40,7 +40,7 @@ char	**list_to_arr(t_elist *head)
 
 char	**list_to_arr_dup(t_elist *head)
 {
-	char		**ret;
+	char	**ret;
 	int		i;
 	int		len;
 	t_elist	*current;

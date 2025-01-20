@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_builtins_special.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/20 13:14:59 by vcaratti          #+#    #+#             */
+/*   Updated: 2025/01/20 13:30:07 by vcaratti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/exec.h"
 
 int	is_special_builtin(t_executor *exec)
@@ -6,9 +18,9 @@ int	is_special_builtin(t_executor *exec)
 		return (0);
 	if (!exec->exec_args.next->arg)
 		return (0);
-	if (!ft_strcmp(exec->exec_args.next->arg, "cd") 
-			|| !ft_strcmp(exec->exec_args.next->arg, "export")
-			|| !ft_strcmp(exec->exec_args.next->arg, "unset"))
+	if (!ft_strcmp(exec->exec_args.next->arg, "cd")
+		|| !ft_strcmp(exec->exec_args.next->arg, "export")
+		|| !ft_strcmp(exec->exec_args.next->arg, "unset"))
 		return (1);
 	return (0);
 }
@@ -28,7 +40,7 @@ int	handle_cd(t_executor *exec, char **argv)
 int	look_for_builtin(t_executor *exec_head)
 {
 	char	**argv;
-	int	ret;
+	int		ret;
 
 	ret = -1;
 	if (exec_head->next || !is_special_builtin(exec_head))

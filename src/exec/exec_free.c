@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:26:08 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 12:33:58 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:18:27 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	free_list(t_elist *head)
 {
 	t_elist	*current;
 	t_elist	*next;
-	
+
 	current = head->next;
 	while (current)
 	{
