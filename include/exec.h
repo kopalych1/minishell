@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/16 14:41:40 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/20 11:30:57 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef	struct s_executor
 	t_elist			exec_args;
 	t_cmd			cmd;
 	t_hashmap		*env_variables;
+	char			**envp;
 	int			fid;
 	int			pipes[2];
 	int			fds[2];
