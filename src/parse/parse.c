@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 04:04:01 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/18 12:21:39 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:54:29 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,31 +108,48 @@ int	post_process_argv(
 	return (0);
 }
 
-char	**args_parse(char *str, t_hashmap *env_variables)
+int	add_after_pipe(char **str, t_hashmap *env_variables)
 {
-	const ssize_t	argc = calculate_argc(str);
-	char			**ret;
+	extern int		g_exit_code;
 	char			*extra_line;
+	unsigned char	flag;
 
+	flag = 1;
+	extra_line = NULL;
+	while (flag)
+	{
+		while (!extra_line)
+		{
+			free(extra_line);
+			extra_line = pipe_readline(env_variables);
+			if (g_exit_code == 1)
+				return (ENOMEM);
+			else if (g_exit_code)
+				return (0);
+		}
+		append_str(str, extra_line);
+		flag = ends_with_pipe(extra_line);
+		free(extra_line);
+	}
+	return (0);
+}
+
+char	**args_parse(char **str, t_hashmap *env_variables)
+{
+	ssize_t	argc;
+	char	**ret;
+
+	if (**str && ends_with_pipe(*str))
+		if (add_after_pipe(str, env_variables))
+			return (NULL);
+	argc = calculate_argc(*str);
 	if (argc == -1)
 		return (NULL);
 	ret = ft_calloc(argc + 1, sizeof(char *));
 	if (!ret)
 		return (NULL);
-	if (fill_argv(&ret, argc, str) == -1)
+	if (fill_argv(&ret, argc, *str) == -1)
 		return (NULL);
-	if (ret[argc - 1][0] == '|')
-	{
-		extra_line = pipe_readline(env_variables);
-		if (extra_line == NULL)
-			return (NULL); //NOT GOOD, need to implement scenario where minishell doesnt terminate, and the execution doesnt execute
-		//while (!extra_line)
-		//	extra_line = pipe_readline(env_variables);
-		ret = ft_realloc(ret, (argc + 1) * sizeof(char *),
-				(argc + 2) * sizeof(char *));
-		ret[argc] = extra_line;
-		ret[argc + 1] = 0;
-	}
 	if (post_process_argv(&ret, argc, env_variables) == -1)
 		return (NULL);
 	return (ret);

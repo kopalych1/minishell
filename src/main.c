@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/21 12:18:46 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:57:41 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ static int	minishell_noninteractive(
 	char	**user_argv;
 
 	user_argc = calculate_argc(arg);
-	user_argv = args_parse(arg, env_variables);
+	user_argv = args_parse(&arg, env_variables);
 	route(user_argc, user_argv, env_variables);
 	env_variables->free(env_variables);
 	free_arr_str(user_argv);
@@ -179,7 +179,7 @@ static int	minishell_interactive(
 		if (!line)
 			break ;
 		user_argc = calculate_argc(line);
-		user_argv = args_parse(line, env_variables);
+		user_argv = args_parse(&line, env_variables);
 		if (!user_argv)
 			return (free(line), rl_clear_history(), env_variables->free(env_variables), free_arr_str(user_argv), ENOMEM);
 

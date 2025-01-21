@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_readline_tools.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
+/*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/21 12:12:27 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:59:14 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	ends_with_pipe(char *str)
 {
 	int	i;
 
+	if (!str)
+		return (0);
 	i = ft_strlen(str);
 	while (--i)
 	{
