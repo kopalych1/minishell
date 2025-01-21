@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 15:15:06 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:12:27 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +19,7 @@ void	handle_interupt(int signum)
 		if (signum == SIGINT)
 			exit(3);
 		printf("minishell: syntax error: unexpected end of file\n");
-		exit(130); // return code, needs to be in global?
+		exit(130);
 	}
 }
 
@@ -36,7 +35,7 @@ void	free_close_exit(char **arr, int fd, int ret)
 	exit(ret);
 }
 
-int	starts_with_pipe(char  *str)
+int	starts_with_pipe(char *str)
 {
 	size_t	i;
 
@@ -44,8 +43,8 @@ int	starts_with_pipe(char  *str)
 	while (++i < ft_strlen(str))
 	{
 		if (ft_isspace(str[i]))
-			continue;
-		else if(str[i] == '|')
+			continue ;
+		else if (str[i] == '|')
 			return (1);
 		else
 			return (0);
@@ -61,7 +60,7 @@ int	ends_with_pipe(char *str)
 	while (--i)
 	{
 		if (ft_isspace(str[i]))
-			continue;
+			continue ;
 		else if (str[i] == '|')
 			return (1);
 		else

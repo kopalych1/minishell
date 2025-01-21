@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/16 11:58:00 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:18:46 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,7 @@ char	*generate_promt(t_hashmap *env_variables)
 static int	route(
 	int user_argc,
 	char **user_argv,
-	t_hashmap *env_variables,
-	char **envp
+	t_hashmap *env_variables
 )
 
 //NEED TO IMPLEMENT BELOW FOR CD
@@ -135,15 +134,14 @@ static int	route(
 	(void)user_argc;
 	int	exec_ret;
 	exec_ret = 0;
-	if (executor(user_argv, envp, env_variables, &exec_ret) == 1) // i have to handle this better, fix ret path of builtins
+	if (executor(user_argv, env_variables, &exec_ret) == 1) // i have to handle this better, fix ret path of builtins
 		return (1);
 	return (0);
 }
 
 static int	minishell_noninteractive(
 				char *arg,
-				t_hashmap *env_variables,
-				char **envp
+				t_hashmap *env_variables
 )
 {
 	int		user_argc;
@@ -151,15 +149,14 @@ static int	minishell_noninteractive(
 
 	user_argc = calculate_argc(arg);
 	user_argv = args_parse(arg, env_variables);
-	route(user_argc, user_argv, env_variables, envp);
+	route(user_argc, user_argv, env_variables);
 	env_variables->free(env_variables);
 	free_arr_str(user_argv);
 	exit(0);
 }
 
 static int	minishell_interactive(
-				t_hashmap *env_variables,
-				char **envp
+				t_hashmap *env_variables
 )
 {
 	char	*line;
@@ -187,7 +184,7 @@ static int	minishell_interactive(
 			return (free(line), rl_clear_history(), env_variables->free(env_variables), free_arr_str(user_argv), ENOMEM);
 
 		if (user_argv[0])
-			if (route(user_argc, user_argv, env_variables, envp))
+			if (route(user_argc, user_argv, env_variables))
 				break ;
 
 		add_history (line);
@@ -211,8 +208,8 @@ int	main(int argc, char **argv, char **envp)
 	if (fill_env_variables(&env_variables, envp))
 		return (ENOMEM);
 	if (argc == 3)
-		minishell_noninteractive(argv[2], &env_variables, envp);
-	minishell_interactive(&env_variables, envp);
+		minishell_noninteractive(argv[2], &env_variables);
+	minishell_interactive(&env_variables);
 	return (0);
 }
 

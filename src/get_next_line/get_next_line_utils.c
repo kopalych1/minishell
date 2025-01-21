@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:43:18 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 14:44:02 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:13:13 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*get_first_line(char *buffer)
 		ret[i] = buffer[i];
 	ret[i] = '\0';
 	i = 0;
-	buffer_shift(buffer, counter); 
+	buffer_shift(buffer, counter);
 	return (ret);
 }
 

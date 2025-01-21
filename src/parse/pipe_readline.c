@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/15 15:15:06 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:11:08 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int	check_line(char *line, char ***arr, int *stop)
 {
 	char	**new_arr;
-	int	i;
+	int		i;
 
 	*stop = 1;
 	if (starts_with_pipe(line))
@@ -64,12 +64,12 @@ static int	get_new_line(char **line, char ***arr)
 static void	pipe_readline_routine(int fd, t_hashmap *env)
 {
 	char	**arr;
-	int	stop;
+	int		stop;
 	char	*line;
 
 	signal(SIGINT, handle_interupt);
 	signal(SIGQUIT, handle_interupt);
-	arr = NULL;	
+	arr = NULL;
 	if (get_new_line(&line, &arr))
 		return (free_nt_arr(arr), handle_interupt(130));
 	if (post_process_argv(&arr, ft_arr_len(arr), env) == -1)
@@ -90,11 +90,11 @@ static void	pipe_readline_routine(int fd, t_hashmap *env)
 //256:	malloc/write error
 //512:	bad token
 //768:	ctrl-C
-//33280:ctrl-D 
-static void	set_exit_code()
+//33280:ctrl-D
+static void	set_exit_code(void)
 {
 	extern int	g_exit_code;
-	
+
 	if (g_exit_code == 256)
 		g_exit_code = 1;
 	if (g_exit_code == 512)
@@ -107,10 +107,10 @@ static void	set_exit_code()
 
 char	*pipe_readline(t_hashmap *env)
 {
-	int	child;
+	int			child;
 	extern int	g_exit_code;
-	int	pipes[2];
-	char	*line;
+	int			pipes[2];
+	char		*line;
 
 	g_exit_code = 0;
 	if (pipe(pipes) == -1)

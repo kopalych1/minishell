@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:41 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/15 14:42:31 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:07:38 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ char			*process_arg(
 					size_t size,
 					t_hashmap *env_variables
 					);
-int			post_process_argv(
+int				post_process_argv(
 					char ***argv,
 					const size_t argc,
 					t_hashmap *env_variables
-);
+					);
 char			*pipe_readline(t_hashmap *env);
-void	handle_interupt(int signum);
-void	free_close_exit(char **arr, int fd, int ret);
-int	starts_with_pipe(char  *str);
-int	ends_with_pipe(char *str);
+void			handle_interupt(int signum);
+void			free_close_exit(char **arr, int fd, int ret);
+int				starts_with_pipe(char *str);
+int				ends_with_pipe(char *str);
 
 /*  */
 

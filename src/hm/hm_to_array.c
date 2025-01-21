@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 13:16:30 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/20 13:16:33 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:08:28 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*join_key_content(t_hashmap_item *item)
 	return (ret);
 }
 
-char **hm_to_array(t_hashmap *hm)
+char	**hm_to_array(t_hashmap *hm)
 {
 	size_t	i;
 	char	**ret;

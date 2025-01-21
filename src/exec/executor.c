@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 11:37:53 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/20 13:24:06 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:17:32 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,11 @@ int	close_wait(t_executor *exec_head)
 	return (ret);
 }
 
-int	executor(char **args, char **envp, t_hashmap *env_variables, int *exec_ret)
+int	executor(char **args, t_hashmap *env_variables, int *exec_ret)
 {
 	t_executor	*exec_head;
 	int			tokenise_ret;
 
-	(void)envp;//
 	tokenise_ret = tokenise(args, &exec_head, env_variables);
 	if (tokenise_ret)
 		return (tokenise_ret - 1);
