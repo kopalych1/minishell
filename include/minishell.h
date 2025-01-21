@@ -40,6 +40,8 @@ void			free_arr_n(void **arr, size_t n);
 
 void			append_str(char **str1, char *str2);
 
+void			signal_handler(int signum);
+
 /* PARSER */
 
 /* parser utils */

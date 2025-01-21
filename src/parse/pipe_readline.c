@@ -102,7 +102,7 @@ static void	set_exit_code(void)
 	if (g_exit_code == 768)
 		g_exit_code = 130;
 	if (g_exit_code == 33280)
-		g_exit_code = 0;
+		g_exit_code = 3;
 }
 
 char	*pipe_readline(t_hashmap *env)

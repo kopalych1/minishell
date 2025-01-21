@@ -111,25 +111,20 @@ int	post_process_argv(
 int	add_after_pipe(char **str, t_hashmap *env_variables)
 {
 	extern int		g_exit_code;
-	char			*extra_line;
-	unsigned char	flag;
-
-	flag = 1;
-	extra_line = NULL;
-	while (flag)
+			
+	append_str(str, pipe_readline(env_variables));
+	if (g_exit_code == 1)
+		return (ENOMEM);
+	else if (g_exit_code)
 	{
-		while (!extra_line)
-		{
-			free(extra_line);
-			extra_line = pipe_readline(env_variables);
-			if (g_exit_code == 1)
-				return (ENOMEM);
-			else if (g_exit_code)
-				return (0);
-		}
-		append_str(str, extra_line);
-		flag = ends_with_pipe(extra_line);
-		free(extra_line);
+		free(*str);
+		*str = malloc(sizeof(char));
+		if (!(*str))
+			return (ENOMEM);
+		(*str)[0] = '\0';
+		if (g_exit_code == 3)
+			g_exit_code = 0;
+		return (0);
 	}
 	return (0);
 }

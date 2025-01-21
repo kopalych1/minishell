@@ -106,35 +106,14 @@ static int	route(
 	char **user_argv,
 	t_hashmap *env_variables
 )
-
-//NEED TO IMPLEMENT BELOW FOR CD
-
-{/*
-	if (!ft_strcmp(user_argv[0], "exit"))
-		return (1);
-	if (!ft_strcmp(user_argv[0], "cd"))
-	{
-		g_exit_code = ft_cd(env_variables, user_argc, user_argv);
-		if (g_exit_code == 1)
-			printf("ft_cd: no such file or directory %s\n", user_argv[1]);
-		else if (g_exit_code == ENOMEM)
-			return (printf("ft_cd: not enough memory\n"), ENOMEM);
-	}
-	if (!ft_strcmp(user_argv[0], "echo"))
-		g_exit_code = ft_echo(user_argc, user_argv);
-	if (!ft_strcmp(user_argv[0], "pwd"))
-		g_exit_code = ft_pwd(env_variables);
-	if (!ft_strcmp(user_argv[0], "env"))
-		g_exit_code = ft_env(env_variables);
-	if (!ft_strcmp(user_argv[0], "unset"))
-		g_exit_code = ft_unset(env_variables, user_argc, user_argv);
-	if (!ft_strcmp(user_argv[0], "export"))
-		g_exit_code = ft_export(env_variables, user_argc, user_argv);
-	printf("%d\n", g_exit_code);*/
-	(void)user_argc;
+{
 	int	exec_ret;
+
+	(void)user_argc;	
 	exec_ret = 0;
-	if (executor(user_argv, env_variables, &exec_ret) == 1) // i have to handle this better, fix ret path of builtins
+	if (user_argv[0][0] == '\0')
+		return (0);
+	if (executor(user_argv, env_variables, &exec_ret) == 1)
 		return (1);
 	return (0);
 }
@@ -182,7 +161,6 @@ static int	minishell_interactive(
 		user_argv = args_parse(&line, env_variables);
 		if (!user_argv)
 			return (free(line), rl_clear_history(), env_variables->free(env_variables), free_arr_str(user_argv), ENOMEM);
-
 		if (user_argv[0])
 			if (route(user_argc, user_argv, env_variables))
 				break ;
