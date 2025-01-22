@@ -76,6 +76,7 @@ static void	nullset_exec(t_executor **ret)
 	(*ret)->heredoc_p[0] = -1;
 	(*ret)->heredoc_p[1] = -1;
 	(*ret)->bad_command = 0;
+	(*ret)->fid = -1;
 }
 
 int	create_exec(t_executor **ret, t_executor *p

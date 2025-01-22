@@ -12,6 +12,16 @@
 
 #include "../../include/exec.h"
 
+static int	open_non_append(char *arg)
+{
+	int	fd;
+
+	fd = open(arg, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fd == -1)
+		return (perror(NULL), -2);
+	return (fd);
+}
+
 int	open_outfiles(t_executor *exec)
 {
 	t_elist	*current;
@@ -29,7 +39,7 @@ int	open_outfiles(t_executor *exec)
 		current = current->next;
 	}
 	if (current->mode != 'a')
-		return (open(current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0777));
+		return (open_non_append(current->arg));
 	fd = open(current->arg, O_RDWR | O_APPEND, 0777);
 	if (fd == -1)
 		fd = open(current->arg, O_WRONLY | O_CREAT | O_TRUNC, 0777);
