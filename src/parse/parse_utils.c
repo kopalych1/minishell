@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:53:02 by akostian          #+#    #+#             */
-/*   Updated: 2024/12/18 16:17:17 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/22 10:21:41 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,20 @@ size_t	get_next_arg_len(char *str)
 		str++;
 	}
 	return (length);
+}
+
+size_t	exit_code_length(void)
+{
+	extern int	g_exit_code;
+	int			n;
+	size_t		ret;
+
+	n = g_exit_code;
+	ret = 0;
+	while (n)
+	{
+		ret++;
+		n /= 10;
+	}
+	return (ret);
 }

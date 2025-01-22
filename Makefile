@@ -6,7 +6,7 @@
 #    By: akostian <akostian@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/19 13:20:29 by akostian          #+#    #+#              #
-#    Updated: 2025/01/16 13:36:52 by vcaratti         ###   ########.fr        #
+#    Updated: 2025/01/22 10:25:58 by akostian         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ VPATH					= src:src/hm:src/parse:src/builtin:src/exec:src/get_next_line
 
 SRC_DIR					= src
 SRCS					= main.c \
+						  minishell_interactive_utils.c \
 						  parse.c process_arg.c get_var_length.c calculate_argc.c parse_utils.c pipe_readline.c pipe_readline_tools.c\
 						  hm_free.c hm_get.c hm_set.c hm_init.c hm_delete.c hm_key_exists.c hm_sort_keys.c hm_to_array.c\
 						  ft_cd.c ft_echo.c ft_pwd.c ft_env.c ft_unset.c ft_export.c \
@@ -35,7 +36,7 @@ LIBFT					= $(LIBFT_DIR)/libft.a
 OBJS					= $(addprefix $(BUILD_DIR)/, $(SRCS:%.c=%.o))
 
 CC						= cc
-CFLAGS					= -Wall -Wextra -Werror -static-libasan
+CFLAGS					= -Wall -Wextra -Werror -g3 -static-libasan
 
 NORMINETTE				= norminette
 NORMINETTE_FLAGS		= --use-gitignore

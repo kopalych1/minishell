@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 04:04:01 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/21 14:54:29 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/22 10:21:36 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,6 @@ static int	fill_argv(char ***argv, const size_t argc, char *str)
 	}
 	(*argv)[ret_index] = 0;
 	return (0);
-}
-
-static size_t	exit_code_length(void)
-{
-	extern int	g_exit_code;
-	int			n;
-	size_t		ret;
-
-	n = g_exit_code;
-	ret = 0;
-	while (n)
-	{
-		ret++;
-		n /= 10;
-	}
-	return (ret);
 }
 
 // Returns a length of value of every var combined in argument
@@ -111,7 +95,7 @@ int	post_process_argv(
 int	add_after_pipe(char **str, t_hashmap *env_variables)
 {
 	extern int		g_exit_code;
-			
+
 	append_str(str, pipe_readline(env_variables));
 	if (g_exit_code == 1)
 		return (ENOMEM);
