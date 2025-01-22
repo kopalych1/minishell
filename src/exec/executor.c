@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 11:37:53 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/22 11:56:58 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:39:19 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,8 @@ int	executor(char **args, t_hashmap *env_variables, int *exec_ret)
 	if (*exec_ret)
 		return (free_all(&exec_head), 0);
 	*exec_ret = close_wait(exec_head);
-	if (is_builtin(exec_head) && !exec_head->next)
-	{
-		if (!ft_strcmp(exec_head->exec_args.next->arg, "exit"))
-			return (free_all(&exec_head), 1);
-	}
+	if (check_exit(exec_head, exec_ret))
+		return (free_all(&exec_head), 1);
 	free_all(&exec_head);
 	return (0);
 }

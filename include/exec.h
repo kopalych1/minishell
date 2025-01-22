@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/22 11:52:34 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:39:42 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ int		has_special_c(char *str);
 char	*trim_redirect(char *str);
 int		get_nb_exec(t_executor *exec_head);
 void	ignore_signal(int signum);
+int		check_exit(t_executor *exec_head, int *exec_ret);
 
 //#===#		exec_io.c		#===#//
 

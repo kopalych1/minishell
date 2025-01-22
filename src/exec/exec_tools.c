@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:49:56 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/20 13:18:59 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:39:30 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,20 @@ int	get_nb_exec(t_executor *exec_head)
 void	ignore_signal(int signum)
 {
 	(void)signum;
+}
+
+int	check_exit(t_executor *exec_head, int *exec_ret)
+{	
+	if (is_builtin(exec_head) && !exec_head->next)
+	{
+		if (!ft_strcmp(exec_head->exec_args.next->arg, "exit"))
+		{
+			if (!exec_head->exec_args.next->next)
+				*exec_ret = 0;
+			else
+				*exec_ret = ft_atoi(exec_head->exec_args.next->next->arg);
+			return (1);
+		}
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/22 12:06:00 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:38:44 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	fill_env_variables(t_hashmap *env_variables, char **envp)
 static int	route(
 	int user_argc,
 	char **user_argv,
-	t_hashmap *env_variables
+	t_hashmap *env_variables,
+	int *minishell_ret
 )
 {
 	extern int	g_exit_code;
@@ -56,6 +57,8 @@ static int	route(
 	if (user_argv[0][0] == '\0')
 		return (0);
 	exec_err = executor(user_argv, env_variables, &exec_ret) == 1;
+	if (exec_err)
+		*minishell_ret = exec_ret;
 	if (exec_ret == 2)
 		g_exit_code = 130;
 	else
@@ -65,7 +68,8 @@ static int	route(
 
 static int	minishell_noninteractive(
 				char *arg,
-				t_hashmap *env_variables
+				t_hashmap *env_variables,
+				int *minishell_ret
 )
 {
 	int		user_argc;
@@ -73,14 +77,15 @@ static int	minishell_noninteractive(
 
 	user_argc = calculate_argc(arg);
 	user_argv = args_parse(&arg, env_variables);
-	route(user_argc, user_argv, env_variables);
+	route(user_argc, user_argv, env_variables, minishell_ret);
 	env_variables->free(env_variables);
 	free_arr_str(user_argv);
 	exit(0);
 }
 
 static int	minishell_interactive(
-				t_hashmap *env_variables
+				t_hashmap *env_variables,
+				int *minishell_ret
 )
 {
 	char	*line;
@@ -101,7 +106,7 @@ static int	minishell_interactive(
 		if (!user_argv)
 			return (free_stuff(&line, env_variables, &user_argv), ENOMEM);
 		if (user_argv[0])
-			if (route(user_argc, user_argv, env_variables))
+			if (route(user_argc, user_argv, env_variables, minishell_ret))
 				break ;
 		add_history (line);
 		free_arr_str(user_argv);
@@ -113,14 +118,17 @@ static int	minishell_interactive(
 int	main(int argc, char **argv, char **envp)
 {
 	t_hashmap	env_variables;
+	int			minishell_ret;
 
+	minishell_ret = 0;
 	if ((argc < 1) || (argc > 3))
 		return (0);
 	hm_init(&env_variables);
 	if (fill_env_variables(&env_variables, envp))
 		return (ENOMEM);
 	if (argc == 3)
-		minishell_noninteractive(argv[2], &env_variables);
-	minishell_interactive(&env_variables);
-	return (0);
+		minishell_noninteractive(argv[2], &env_variables, &minishell_ret);
+	else
+		minishell_interactive(&env_variables, &minishell_ret);
+	return (minishell_ret);
 }
