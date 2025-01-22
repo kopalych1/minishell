@@ -6,7 +6,7 @@
 #    By: akostian <akostian@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/19 13:20:29 by akostian          #+#    #+#              #
-#    Updated: 2025/01/22 10:25:58 by akostian         ###   ########.fr        #
+#    Updated: 2025/01/22 14:27:23 by vcaratti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,15 +95,6 @@ fclean:
 	make fclean -C $(LIBFT_DIR)
 
 	$(RM) $(BUILD_DIR) $(NAME)
-#
-
-
-test: all $(LIBFT)
-	@$(CC) $(CFLAGS)  -o test.out  tests/parser.c  src/parse/*.c src/free_arr.c src/hm/*.c $(LIBFT)
-
-	@./test.out
-
-	@$(RM) test.out
 #
 
 

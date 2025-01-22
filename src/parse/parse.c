@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 04:04:01 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/22 13:24:52 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:27:12 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	post_process_argv(
 int	add_after_pipe(char **str, t_hashmap *env_variables)
 {
 	extern int		g_exit_code;
-	char				*ret_str;
+	char			*ret_str;
 
 	ret_str = pipe_readline(env_variables);
 	append_str(str, ret_str);
