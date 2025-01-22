@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:49:56 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/22 12:39:30 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:18:43 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ignore_signal(int signum)
 }
 
 int	check_exit(t_executor *exec_head, int *exec_ret)
-{	
+{
 	if (is_builtin(exec_head) && !exec_head->next)
 	{
 		if (!ft_strcmp(exec_head->exec_args.next->arg, "exit"))
