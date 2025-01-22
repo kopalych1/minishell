@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 08:48:55 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/18 12:10:27 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/22 09:37:52 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	treat_var(
 		j = 0;
 		while (exit_code_str[j])
 			(*ret)[(*i)++] = exit_code_str[j++];
-		return (*old_arg = *old_arg + j, free(exit_code_str), 0);
+		return (*old_arg = *old_arg + 2, free(exit_code_str), 0);
 	}
 	written_length = write_var(ret, i, *old_arg, env_variables);
 	if (written_length == -1)
