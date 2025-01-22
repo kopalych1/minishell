@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 13:15:46 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/22 11:47:19 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:15:13 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ int	heredoc(int fd, char *eof, t_hashmap *env)
 		heredoc_routine(fd, eof, env);
 	close(fd);
 	waitpid(child, &ret, WCONTINUED);
-	printf("ret: %d\n", ret);
 	if (ret == 256)
 		g_exit_code = 2;
 	if (ret == 256)
