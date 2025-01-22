@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 04:04:01 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/22 10:21:36 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:24:52 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,11 @@ int	post_process_argv(
 int	add_after_pipe(char **str, t_hashmap *env_variables)
 {
 	extern int		g_exit_code;
+	char				*ret_str;
 
-	append_str(str, pipe_readline(env_variables));
+	ret_str = pipe_readline(env_variables);
+	append_str(str, ret_str);
+	free(ret_str);
 	if (g_exit_code == 1)
 		return (ENOMEM);
 	else if (g_exit_code)
