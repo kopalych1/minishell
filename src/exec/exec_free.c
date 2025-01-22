@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:26:08 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/20 13:18:27 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:10:48 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	free_all(t_executor **head)
 			free_nt_arr(current->cmd.args);
 		if (current->cmd.path)
 			free(current->cmd.path);
+		if (current->envp)
+			free_nt_arr(current->envp);
 		free(current);
 		*head = NULL;
 		current = next;
