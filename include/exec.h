@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:37:51 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/21 12:19:22 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 11:52:34 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef struct s_executor
 //#===#		executor.c		#===#//
 
 int		exec_routine(t_executor *exec);
-int		start_pipes(t_executor **exec_head);
+int		start_pipes(t_executor **exec_head, int *exec_ret);
 int		executor(char **args, t_hashmap *env_variables, int *exec_ret);
 
 //#===#		exec_tokenise.c		#===#//

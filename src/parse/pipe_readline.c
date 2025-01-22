@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:34:05 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/21 12:11:08 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:04:49 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_line(char *line, char ***arr, int *stop)
 		new_arr[i] = (*arr)[i];
 	new_arr[i++] = line;
 	new_arr[i] = 0;
-	free(*arr);
+	free_nt_arr(*arr);
 	*arr = new_arr;
 	if (ends_with_pipe(line))
 		*stop = 0;

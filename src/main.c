@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/22 10:08:01 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:06:00 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,20 @@ static int	route(
 	t_hashmap *env_variables
 )
 {
-	int	exec_ret;
+	extern int	g_exit_code;
+	int			exec_ret;
+	int			exec_err;
 
 	(void)user_argc;
 	exec_ret = 0;
 	if (user_argv[0][0] == '\0')
 		return (0);
-	if (executor(user_argv, env_variables, &exec_ret) == 1)
-		return (1);
-	return (0);
+	exec_err = executor(user_argv, env_variables, &exec_ret) == 1;
+	if (exec_ret == 2)
+		g_exit_code = 130;
+	else
+		g_exit_code = exec_ret / 256;
+	return (exec_err);
 }
 
 static int	minishell_noninteractive(
