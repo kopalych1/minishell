@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/22 12:38:44 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:17:01 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,11 @@ int	main(int argc, char **argv, char **envp)
 	if (fill_env_variables(&env_variables, envp))
 		return (ENOMEM);
 	if (argc == 3)
+	{
+		if (ft_strcmp(argv[1], "-c"))
+			return (0);
 		minishell_noninteractive(argv[2], &env_variables, &minishell_ret);
+	}
 	else
 		minishell_interactive(&env_variables, &minishell_ret);
 	return (minishell_ret);
