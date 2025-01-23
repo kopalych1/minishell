@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:56:41 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/22 10:24:53 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/23 10:53:31 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ unsigned long	ft_ulmax(unsigned long a, unsigned long b);
 size_t			get_next_arg_len(char *str);
 size_t			get_var_length(char *str);
 size_t			exit_code_length(void);
+int				check_quotes(char *str);
 
 /* PARSER */
 

@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 04:04:01 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/22 14:27:12 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:05:24 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,19 @@ int	add_after_pipe(char **str, t_hashmap *env_variables)
 
 char	**args_parse(char **str, t_hashmap *env_variables)
 {
-	ssize_t	argc;
-	char	**ret;
+	ssize_t		argc;
+	char		**ret;
+	extern int	g_exit_code;
 
 	if (**str && ends_with_pipe(*str))
 		if (add_after_pipe(str, env_variables))
 			return (NULL);
+	if (check_quotes(*str))
+	{
+		(*str)[0] = 0;
+		g_exit_code = 1;
+		ft_printf("minishell: bad combination of quotes\n");
+	}
 	argc = calculate_argc(*str);
 	if (argc == -1)
 		return (NULL);
