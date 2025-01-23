@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/23 12:11:39 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:33:39 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ static int	minishell_noninteractive(
 	int		user_argc;
 	char	**user_argv;
 
+	if (arg[0] == '\0')
+		exit(0);
 	user_argc = calculate_argc(arg);
 	user_argv = args_parse(&arg, env_variables);
 	route(user_argc, user_argv, env_variables, minishell_ret);
