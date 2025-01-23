@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 13:14:59 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/20 13:30:07 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:41:40 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,11 @@ int	look_for_builtin(t_executor *exec_head)
 	else if (!ft_strcmp(exec_head->exec_args.next->arg, "export"))
 		ret = ft_export(exec_head->env_variables, ft_arr_len(argv), argv);
 	else if (!ft_strcmp(exec_head->exec_args.next->arg, "unset"))
-		ret = ft_unset(exec_head->env_variables, ft_arr_len(argv), argv);
+	{
+		ret = 0;
+		if (ft_unset(exec_head->env_variables, ft_arr_len(argv), argv))
+			ft_printf("minishell: Environment variable doesn't exist\n");
+	}
 	else if (!ft_strcmp(exec_head->exec_args.next->arg, "exit"))
 		ret = 1;
 	free_nt_arr(argv);
