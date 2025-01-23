@@ -6,7 +6,7 @@
 /*   By: akostian <akostian@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:59:05 by akostian          #+#    #+#             */
-/*   Updated: 2025/01/22 14:17:01 by akostian         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:11:39 by akostian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	fill_env_variables(t_hashmap *env_variables, char **envp)
 		key = ft_substr(envp[i], 0, j);
 		value = envp[i] + j + 1;
 		if (!key || !value)
-			return (-1);
+			return (env_variables->free(env_variables), -1);
 		if (env_variables->set(env_variables, key, value, 0) == -1)
-			return (-1);
+			return (free(key), env_variables->free(env_variables), -1);
 		free(key);
 		i++;
 	}
