@@ -6,7 +6,7 @@
 /*   By: vcaratti <vcaratti@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 14:49:56 by vcaratti          #+#    #+#             */
-/*   Updated: 2025/01/22 13:18:43 by vcaratti         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:32:27 by vcaratti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,8 @@
 
 int	has_special_c(char *str)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '<' || str[i] == '>')
-			return (1);
-		i++;
-	}
+	if (str[0] == '<' || str[0] == '>')
+		return (1);
 	return (0);
 }
 
